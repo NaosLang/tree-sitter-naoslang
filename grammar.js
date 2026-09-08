@@ -6,6 +6,9 @@ module.exports = grammar({
         $.comment_line,
         $.comment_multiline,
     ],
+    conflicts: $ => [
+        [$.struct_expression, $._primary_expression],
+    ],
 
     rules: {
         source_file: $ => seq(
@@ -201,7 +204,9 @@ module.exports = grammar({
 
         if_statement: $ => seq(
             'if',
+            '(',
             field('condition', $._expression),
+            ')',
             $.block,
         ),
 
@@ -233,7 +238,42 @@ module.exports = grammar({
             $.member_expression,
             $.index_expression,
             $.function_expression,
+            $.compiler_action,
+            $.cast_action,
+            $.struct_expression,
             $._primary_expression,
+        ),
+
+        struct_expression: $ => seq(
+            field('name', $.identifier),
+            field('genric_args', optional(seq('#', $.generic_params))),
+            '{',
+            field('members', commaSep1Trailing($.struct_members_expr)),
+            '}',
+        ),
+
+        struct_members_expr: $ => seq(
+            field('name', $.identifier),
+            ':',
+            field('value', $._expression),
+        ),
+
+        cast_action: $ => seq(
+            '@',
+            field('name', alias(choice('as', 'bitcast'), $.identifier)),
+            '(',
+            field('type', $._type),
+            ',',
+            field('value', $._expression),
+            ')',
+        ),
+
+        compiler_action: $ => seq(
+            '@',
+            field('name', $.identifier),
+            '(',
+            optional(commaSep1($._expression)),
+            ')',
         ),
 
         _primary_expression: $ => choice(
@@ -258,6 +298,7 @@ module.exports = grammar({
 
         call_expression: $ => prec.left(8, seq(
             field('function', $._expression),
+            field('genric_args', optional(seq('#', $.generic_params))),
             '(',
             optional(commaSep1($._expression)),
             ')'
@@ -265,6 +306,7 @@ module.exports = grammar({
 
         member_expression: $ => prec.left(8, seq(
             field('object', $._expression),
+            field('genric_args', optional(seq('#', $.generic_params))),
             '.',
             field('property', $.identifier)
         )),
