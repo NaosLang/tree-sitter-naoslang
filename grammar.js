@@ -26,14 +26,16 @@ module.exports = grammar({
 
         comment_line: $ => token(seq('//', /.*/)),
 
-        comment_multiline: $ => token(seq(
+        comment_multiline: $ => seq(
             '/*',
             repeat(choice(
-                /[^*]/,                 // Qualsiasi carattere tranne *
-                seq(/\*+/, /[^/*]/)     // Asterischi non seguiti da /
+                $.comment_multiline,
+                /[^*/]+/,
+                '*',
+                '/',
             )),
-            /\*+\//                     // Chiusura solida
-        )),
+            '*/'
+        ),
 
         // +----------------+
         // | Type Extension |
