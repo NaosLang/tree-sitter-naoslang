@@ -1077,12 +1077,12 @@
           }
         ]
       },
-      "generic_params": {
+      "generic_constr": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "generic_params",
+            "type": "generic_constr",
             "named": true
           }
         ]
@@ -1182,12 +1182,12 @@
     "type": "function_sign",
     "named": true,
     "fields": {
-      "generic_params": {
+      "generic_constr": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "generic_params",
+            "type": "generic_constr",
             "named": true
           }
         ]
@@ -1324,6 +1324,110 @@
           },
           {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "generic_constr",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "array_ptr_type",
+            "named": true
+          },
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "dynamic_id_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "generic_id_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      },
+      "types": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "array_ptr_type",
+            "named": true
+          },
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "dynamic_id_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "generic_id_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
             "named": true
           },
           {
@@ -1886,12 +1990,12 @@
           }
         ]
       },
-      "generic_params": {
+      "generic_constr": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "generic_params",
+            "type": "generic_constr",
             "named": true
           }
         ]
@@ -1931,48 +2035,55 @@
   {
     "type": "parameter",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "array_ptr_type",
-          "named": true
-        },
-        {
-          "type": "array_type",
-          "named": true
-        },
-        {
-          "type": "dynamic_id_type",
-          "named": true
-        },
-        {
-          "type": "function_type",
-          "named": true
-        },
-        {
-          "type": "generic_id_type",
-          "named": true
-        },
-        {
-          "type": "id_type",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "ptr_type",
-          "named": true
-        },
-        {
-          "type": "slice_type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_ptr_type",
+            "named": true
+          },
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "dynamic_id_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "generic_id_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2087,44 +2198,55 @@
   {
     "type": "self_parameter",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "array_ptr_type",
-          "named": true
-        },
-        {
-          "type": "array_type",
-          "named": true
-        },
-        {
-          "type": "dynamic_id_type",
-          "named": true
-        },
-        {
-          "type": "function_type",
-          "named": true
-        },
-        {
-          "type": "generic_id_type",
-          "named": true
-        },
-        {
-          "type": "id_type",
-          "named": true
-        },
-        {
-          "type": "ptr_type",
-          "named": true
-        },
-        {
-          "type": "slice_type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "self",
+            "named": false
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_ptr_type",
+            "named": true
+          },
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "dynamic_id_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "generic_id_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

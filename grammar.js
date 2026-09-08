@@ -126,11 +126,11 @@ module.exports = grammar({
 
         generic_constr: $ => seq(
             '<',
-            commaSep1(seq(
+            field('types', commaSep1(seq(
                 field('name', $.identifier),
                 ':',
                 field('type', $._type),
-            )),
+            ))),
             '>',
         ),
 
