@@ -99,6 +99,15 @@ name: (identifier) @type)
 ; Generic arguments are types themselves, so the nested
 ; id_type/generic_id_type rules handle them automatically.
 
+; Generic parameter declarations (con vincolo obbligatorio):
+;
+;   fn foo<T: Numeric>(...)
+;   type Foo<T: Bar> :: ...
+;
+(generic_constr
+name: (identifier) @type.parameter
+type: (_) @type)
+
 ; dyn Trait
 ;
 (dynamic_id_type
@@ -138,10 +147,6 @@ name: (identifier) @type.definition)
 ;
 ;   type Foo<T> ...
 ;
-(generic_params
-types: (id_type
-(identifier) @type.parameter))
-
 ; Struct fields:
 ;
 ;   struct {
