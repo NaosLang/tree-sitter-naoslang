@@ -139,15 +139,15 @@ module.exports = grammar({
         ),
 
         self_parameter: $ => seq(
-            'self',
+            field('name', 'self'),
             ':',
-            $._type,
+            field('type', $._type),
         ),
 
         parameter: $ => seq(
-            $.identifier,
+            field('name', $.identifier),
             ':',
-            $._type,
+            field('type', $._type),
         ),
 
         block: $ => seq(
