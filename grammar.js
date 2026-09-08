@@ -74,7 +74,7 @@ module.exports = grammar({
             field('visibility', optional('pub')),
             'type',
             field('name', $.identifier),
-            field('generic_params', optional($.generic_params)),
+            field('generic_constr', optional($.generic_constr)),
             '::',
             $.complex_type,
             ';'
@@ -116,12 +116,22 @@ module.exports = grammar({
         function_sign: $ => seq(
             'fn',
             field('name', $.identifier),
-            field('generic_params', optional($.generic_params)),
+            field('generic_constr', optional($.generic_constr)),
             $.function_params,
             optional(seq(
                 '->',
                 field('type', $._type)
             )),
+        ),
+
+        generic_constr: $ => seq(
+            '<',
+            commaSep1(seq(
+                field('name', $.identifier),
+                ':',
+                field('type', $._type),
+            )),
+            '>',
         ),
 
         function_params: $ => seq(
@@ -237,7 +247,7 @@ module.exports = grammar({
 
         function_expression: $ => seq(
             'fn',
-            field('generic_params', optional($.generic_params)),
+            field('generic_constr', optional($.generic_constr)),
             $.function_params,
             optional(seq(
                 '->',
