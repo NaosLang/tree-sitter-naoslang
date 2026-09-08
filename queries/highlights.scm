@@ -105,42 +105,22 @@ name: (identifier) @type)
 base: (id_type
 (identifier) @type))
 
-; Pointer:
+; Pointer, array pointer, fixed-size array, slice, function types:
 ;
-;   *int
-;   *const Foo
+;   *int  *const Foo  [*]Foo  [10]int  []int  fn(int) -> bool
 ;
-(ptr_type
-base: (_type) @type)
-
-; Array pointer:
-;
-;   [*]Foo
-;   [*]const Foo
-;
-(array_ptr_type
-base: (_type) @type)
-
-; Fixed-size array:
-;
-;   [10]int
-;
-(array_type
-base: (_type) @type)
-
-; Slice:
-;
-;   []int
-;
-(slice_type
-base: (_type) @type)
-
-; Function types:
-;
-;   fn(int, string) -> bool
-;
-(function_type
-return_type: (_type) @type)
+; NOTA: `_type` è una regola nascosta (nome con underscore) nella
+; grammatica: non esiste come tipo di nodo concreto, quindi non è
+; interrogabile direttamente. I nodi concreti che la sostituiscono
+; (id_type, generic_id_type, dynamic_id_type, ptr_type, ecc.) sono
+; già coperti dalle regole sopra/sotto in modo ricorsivo, quindi qui
+; usiamo il wildcard (_) solo per essere sicuri di colorare anche
+; combinazioni non esplicitamente elencate altrove.
+(ptr_type base: (_) @type)
+(array_ptr_type base: (_) @type)
+(array_type base: (_) @type)
+(slice_type base: (_) @type)
+(function_type return_type: (_) @type)
 
 ; ============================================================
 ; TYPE DECLARATIONS
@@ -160,7 +140,7 @@ name: (identifier) @type.definition)
 ;
 (generic_params
 types: (id_type
-(identifier) @type.parameter)
+(identifier) @type.parameter))
 
 ; Struct fields:
 ;
@@ -179,7 +159,7 @@ name: (identifier) @property)
 ;   }
 ;
 (interface_type_body
-types: (_type) @type)
+types: (_) @type)
 
 ; ============================================================
 ; FUNCTIONS
