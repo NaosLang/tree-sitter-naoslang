@@ -1,0 +1,23 @@
+{
+  "name": "tree-sitter-naoslang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaosLang/tree-sitter-naoslang.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NaosLang/tree-sitter-naoslang/issues"
+  },
+  "homepage": "https://github.com/NaosLang/tree-sitter-naoslang#readme",
+  "devDependencies": {
+    "tree-sitter-cli": "^0.27.0"
+  }
+}
