@@ -64,6 +64,7 @@
 ; ============================================================
 
 "@" @punctuation.special
+"#" @punctuation.special
 
 (attribute
 name: (identifier) @attribute)
@@ -165,6 +166,34 @@ name: (identifier) @property)
 ;
 (interface_type_body
 types: (_) @type)
+
+; ============================================================
+; STRUCT / CAST / COMPILER BUILTINS
+; ============================================================
+
+; Struct literal:
+;
+;   Foo{ x: 1, y: 2 }
+;   Option#<int>{ value: 1 }
+;
+(struct_literal
+name: (identifier) @type)
+
+(struct_members_expr
+name: (identifier) @property)
+
+; @as(Type, value) / @bitcast(Type, value)
+;
+(cast_action
+name: (identifier) @function.builtin)
+
+(cast_action
+type: (_) @type)
+
+; Generic compiler builtins: @sizeof(T), @malloc(n), ecc.
+;
+(compiler_action
+name: (identifier) @function.builtin)
 
 ; ============================================================
 ; FUNCTIONS
