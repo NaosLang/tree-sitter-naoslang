@@ -382,7 +382,7 @@ module.exports = grammar({
         function_type: $ => seq(
             'fn',
             '(',
-            field('params', optional(commaSep1($._type))),
+            optional(commaSep1($._type)),
             ')',
             optional(seq(
                 '->',
