@@ -48,7 +48,7 @@ module.exports = grammar({
             'extends',
             field('type', $._type),
             '{',
-            field('functions', repeat($.function_definition)),
+            repeat($.function_definition),
             '}',
         ),
 
@@ -129,11 +129,11 @@ module.exports = grammar({
 
         generic_constr: $ => seq(
             '<',
-            field('types', commaSep1(seq(
+            commaSep1(seq(
                 field('name', $.identifier),
                 ':',
                 field('type', $._type),
-            ))),
+            )),
             '>',
         ),
 
@@ -425,7 +425,7 @@ module.exports = grammar({
 
         generic_params: $ => seq(
             '<',
-            field('types', commaSep1($._type)),
+            commaSep1($._type),
             '>',
         ),
 
