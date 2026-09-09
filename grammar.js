@@ -381,13 +381,17 @@ module.exports = grammar({
 
         function_type: $ => seq(
             'fn',
-            '(',
-            optional(commaSep1($._type)),
-            ')',
+            $.function_type_params,
             optional(seq(
                 '->',
                 field('return_type', $._type)
             )),
+        ),
+
+        function_type_params: $ => seq(
+            '(',
+            optional(commaSep1($._type)),
+            ')',
         ),
 
         id_type: $ => seq($.identifier),

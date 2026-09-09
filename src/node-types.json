@@ -1719,6 +1719,21 @@
       }
     },
     "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "function_type_params",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_type_params",
+    "named": true,
+    "fields": {},
+    "children": {
       "multiple": true,
       "required": false,
       "types": [
