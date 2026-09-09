@@ -7,7 +7,7 @@ module.exports = grammar({
         $.comment_multiline,
     ],
     conflicts: $ => [
-        [$.struct_expression, $._primary_expression],
+        [$.struct_literal, $._primary_expression],
     ],
 
     rules: {
@@ -237,14 +237,12 @@ module.exports = grammar({
             $.call_expression,
             $.member_expression,
             $.index_expression,
-            $.function_expression,
             $.compiler_action,
             $.cast_action,
-            $.struct_expression,
             $._primary_expression,
         ),
 
-        struct_expression: $ => seq(
+        struct_literal: $ => seq(
             field('name', $.identifier),
             field('genric_args', optional(seq('#', $.generic_params))),
             '{',
@@ -282,10 +280,19 @@ module.exports = grammar({
             $.float_literal,
             $.char_literal,
             $.string_literal,
+            $.struct_literal,
+            $.function_literal,
+            $.array_literal,
             seq('(', $._expression, ')'),
         ),
 
-        function_expression: $ => seq(
+        array_literal: $ => seq(
+            '[',
+            optional(commaSep1($._expression)),
+            ']',
+        ),
+
+        function_literal: $ => seq(
             'fn',
             field('generic_constr', optional($.generic_constr)),
             $.function_params,

@@ -1091,10 +1091,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "function_expression"
-        },
-        {
-          "type": "SYMBOL",
           "name": "compiler_action"
         },
         {
@@ -1103,15 +1099,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "struct_expression"
-        },
-        {
-          "type": "SYMBOL",
           "name": "_primary_expression"
         }
       ]
     },
-    "struct_expression": {
+    "struct_literal": {
       "type": "SEQ",
       "members": [
         {
@@ -1364,6 +1356,18 @@
           "name": "string_literal"
         },
         {
+          "type": "SYMBOL",
+          "name": "struct_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_literal"
+        },
+        {
           "type": "SEQ",
           "members": [
             {
@@ -1382,7 +1386,53 @@
         }
       ]
     },
-    "function_expression": {
+    "array_literal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_expression"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "_expression"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
+    },
+    "function_literal": {
       "type": "SEQ",
       "members": [
         {
@@ -2812,7 +2862,7 @@
   ],
   "conflicts": [
     [
-      "struct_expression",
+      "struct_literal",
       "_primary_expression"
     ]
   ],
