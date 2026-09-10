@@ -1,5 +1,55 @@
 [
   {
+    "type": "alias_import",
+    "named": true,
+    "fields": {
+      "alias": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      },
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_str_literal",
+            "named": true
+          },
+          {
+            "type": "str_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "global_import",
+    "named": true,
+    "fields": {
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_str_literal",
+            "named": true
+          },
+          {
+            "type": "str_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -9,11 +59,19 @@
       "required": false,
       "types": [
         {
+          "type": "alias_import",
+          "named": true
+        },
+        {
           "type": "char_literal",
           "named": true
         },
         {
           "type": "float_literal",
+          "named": true
+        },
+        {
+          "type": "global_import",
           "named": true
         },
         {
@@ -36,6 +94,26 @@
     }
   },
   {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "@",
+    "named": false
+  },
+  {
     "type": "char_literal",
     "named": true
   },
@@ -48,6 +126,10 @@
     "named": true
   },
   {
+    "type": "import",
+    "named": false
+  },
+  {
     "type": "int_literal",
     "named": true
   },
@@ -58,5 +140,9 @@
   {
     "type": "str_literal",
     "named": true
+  },
+  {
+    "type": "using",
+    "named": false
   }
 ]

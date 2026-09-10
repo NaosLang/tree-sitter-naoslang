@@ -20,12 +20,52 @@ module.exports = grammar({
 
     rules: {
         source_file: $ => seq(
+            // imports are valid only on top of the file
+            repeat($._imports),
+
             repeat($._literal),
         ),
+
+        // +------+
+        // | Misc |
+        // +------+
+
+        not_implemented_syntax: $ => token('\0'),
+
 
         // +---------+
         // | Imports |
         // +---------+
+
+        // _imports dispaches to any import decl
+        _imports: $ => choice(
+            $.global_import,
+            $.alias_import,
+        ),
+
+        // global_import parses the global import decl -> using @import(PATH);
+        global_import: $ => seq(
+            'using',
+            $._generic_import,
+            ';'
+        ),
+
+        // alias_import parses the alias import decl -> id = @import(PATH);
+        alias_import: $ => seq(
+            field('alias', $.id_literal),
+            '=',
+            $._generic_import,
+            ';',
+        ),
+
+        // _generic_import parses the generic import decl -> @import(PATH)
+        _generic_import: $ => seq(
+            '@',
+            'import',
+            '(',
+            field('path', choice($.str_literal, $.raw_str_literal)),
+            ')',
+        ),
 
 
         // +----------+
@@ -34,6 +74,7 @@ module.exports = grammar({
 
         // _literal dispaches to any literal parse token
         _literal: $ => literalExcept($),
+
 
         // id_literal parses every identifier (variable names or type names)
         id_literal: $ => token(/[a-zA-Z_][a-z-A-Z0-9_]*/),
@@ -123,7 +164,7 @@ module.exports = grammar({
                 _decimal_exp()
             ),  // exp float -> 1e5
 
-        ))
+        )),
     }
 });
 
@@ -139,6 +180,14 @@ function _decimal_exp() {
         optional(choice('+', '-')),
         _digits(/[1-9]/)
     )
+}
+
+function separatedBy(sep, rule) {
+    return seq(rule, repeat(seq(sep, rule)))
+}
+
+function separatedByTrailing(sep, rule) {
+    return seq(rule, repeat(seq(sep, rule)), optional(sep))
 }
 
 
