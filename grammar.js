@@ -370,7 +370,26 @@ module.exports = grammar({
             $.slice_type,
             $.generic_id_type,
             $.dynamic_id_type,
+            $.module_type,
             $.function_type,
+        ),
+
+        _typeExcludedModule: $ => choice(
+            $.id_type,
+            $.ptr_type,
+            $.array_ptr_type,
+            $.array_type,
+            $.slice_type,
+            $.generic_id_type,
+            $.dynamic_id_type,
+            $.function_type,
+        ),
+
+
+        module_type: $ => seq(
+            field("module_name", $.identifier),
+            '.',
+            field("type", $._typeExcludedModule),
         ),
 
         function_type: $ => seq(

@@ -2093,7 +2093,73 @@
         },
         {
           "type": "SYMBOL",
+          "name": "module_type"
+        },
+        {
+          "type": "SYMBOL",
           "name": "function_type"
+        }
+      ]
+    },
+    "_typeExcludedModule": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "id_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "ptr_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_ptr_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "slice_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "generic_id_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "dynamic_id_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_type"
+        }
+      ]
+    },
+    "module_type": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "module_name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_typeExcludedModule"
+          }
         }
       ]
     },
