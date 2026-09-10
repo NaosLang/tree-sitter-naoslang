@@ -8,6 +8,7 @@ const literalExcept = ($, ...excluded) => {
         $.id_literal,
         $.str_literal,
         $.raw_str_literal,
+        $.int_literal,
     ];
     return choice(...literals.filter(t => !excluded.includes(t)))
 };
@@ -48,9 +49,23 @@ module.exports = grammar({
             '`',
             repeat(/[^`]/),
             '`',
-        ))
+        )),
+
+
+        int_literal: $ => token(choice(
+            seq('0', choice('x', 'X'), _digits(/[0-9a-fA-F]/)), // hexadecimal integer
+            seq(/[1-9]/, _digits(/[0-9]/)),                     // decimal integer
+            seq('0', choice('o', 'O'), _digits(/[0-7]/)),       // octal integer
+            seq('0', choice('b', 'B'), _digits(/[0-1]/)),       // binary integer
+            '0', // zero becouse is not a valid int literal '013' in octal or decimal base
+        )),
     }
 });
+
+// helper function for int_literal
+function _digits(digit_regx) {
+    return seq(digit_regx, repeat(seq(optional('_'), digit_regx)))
+}
 
 
 // module.exports = grammar({
