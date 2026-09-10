@@ -4,7 +4,11 @@ const typeExcept = ($, ...excluded) => {
 };
 
 const literalExcept = ($, ...excluded) => {
-    const literals = [];
+    const literals = [
+        $.id_literal,
+        $.str_literal,
+        $.raw_str_literal,
+    ];
     return choice(...literals.filter(t => !excluded.includes(t)))
 };
 
@@ -26,6 +30,25 @@ module.exports = grammar({
         // +----------+
 
         id_literal: $ => token(/[a-zA-Z_][a-z-A-Z0-9_]*/),
+
+        str_literal: $ => token(seq(
+            '"',
+            repeat(choice(
+                /[^"\\]+/,
+                /\\[abfnrtv\\']/,       // normal escapes
+                /\\[0-7]{3}/,           // octal escape
+                /\\x[0-9a-fA-F]{2}/,    // hexadecimal escape
+                /\\u[0-9a-fA-F]{4}/,    // unicode16 escape
+                /\\U[0-9a-fA-F]{8}/,    // unicode32 escape
+            )),
+            '"',
+        )),
+
+        raw_str_literal: $ => token(seq(
+            '`',
+            repeat(/[^`]/),
+            '`',
+        ))
     }
 });
 
