@@ -9,6 +9,7 @@ const literalExcept = ($, ...excluded) => {
         $.str_literal,
         $.raw_str_literal,
         $.int_literal,
+        $.float_literal,
     ];
     return choice(...literals.filter(t => !excluded.includes(t)))
 };
@@ -59,12 +60,40 @@ module.exports = grammar({
             seq('0', choice('b', 'B'), _digits(/[0-1]/)),       // binary integer
             '0', // zero becouse is not a valid int literal '013' in octal or decimal base
         )),
+
+        float_literal: $ => token(seq(
+            seq(
+                _digits(/[1-9]/),
+                '.',
+                optional(_digits(/[1-9]/), optional(_decimal_exp()))
+            ),   // normal float -> 3.14 | 1. | 1.3e5
+
+            seq(
+                '.',
+                _digits(/[1-9]/),
+                optional(_decimal_exp())
+            ),  // no start float -> .13 | .3e5
+            seq(
+                _digits(/[1-9]/),
+                _decimal_exp()
+            ),  // exp float -> 1e5
+
+        ))
     }
 });
 
 // helper function for int_literal
 function _digits(digit_regx) {
     return seq(digit_regx, repeat(seq(optional('_'), digit_regx)))
+}
+
+// helper function for float_literal
+function _decimal_exp() {
+    return seq(
+        choice('e', 'E'),
+        optional(choice('+', '-')),
+        _digits(/[1-9]/)
+    )
 }
 
 
