@@ -37,7 +37,7 @@ module.exports = grammar({
             '"',
             repeat(choice(
                 /[^"\\]+/,
-                /\\[abfnrtv\\']/,       // normal escapes
+                /\\[abfnrtv\\"]/,       // normal escapes
                 /\\[0-7]{3}/,           // octal escape
                 /\\x[0-9a-fA-F]{2}/,    // hexadecimal escape
                 /\\u[0-9a-fA-F]{4}/,    // unicode16 escape
