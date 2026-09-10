@@ -1,6 +1,10 @@
 module.exports = grammar({
     name: 'naoslang',
 
+    externals: $ => [
+        $.comment_multiline,
+    ],
+
     extras: $ => [
         /\s/,
         $.comment_line,
@@ -29,16 +33,6 @@ module.exports = grammar({
 
         comment_line: $ => token(seq('//', /.*/)),
 
-        comment_multiline: $ => seq(
-            '/*',
-            repeat(choice(
-                $.comment_multiline,
-                /[^*/]+/,
-                '*',
-                '/',
-            )),
-            '*/'
-        ),
 
         // +----------------+
         // | Type Extension |

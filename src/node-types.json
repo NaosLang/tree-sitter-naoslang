@@ -1200,22 +1200,6 @@
     }
   },
   {
-    "type": "comment_multiline",
-    "named": true,
-    "extra": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "comment_multiline",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "compiler_action",
     "named": true,
     "fields": {
@@ -3463,10 +3447,6 @@
     "named": false
   },
   {
-    "type": "*/",
-    "named": false
-  },
-  {
     "type": "*=",
     "named": false
   },
@@ -3508,10 +3488,6 @@
   },
   {
     "type": "/",
-    "named": false
-  },
-  {
-    "type": "/*",
     "named": false
   },
   {
@@ -3616,6 +3592,11 @@
   },
   {
     "type": "comment_line",
+    "named": true,
+    "extra": true
+  },
+  {
+    "type": "comment_multiline",
     "named": true,
     "extra": true
   },
