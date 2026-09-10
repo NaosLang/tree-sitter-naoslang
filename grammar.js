@@ -20,7 +20,7 @@ module.exports = grammar({
 
     rules: {
         source_file: $ => seq(
-
+            repeat($._literal),
         ),
 
         // +---------+
@@ -32,8 +32,20 @@ module.exports = grammar({
         // | Literals |
         // +----------+
 
+        // _literal dispaches to any literal parse token
+        _literal: $ => literalExcept($),
+
+        // id_literal parses every identifier (variable names or type names)
         id_literal: $ => token(/[a-zA-Z_][a-z-A-Z0-9_]*/),
 
+        // str_literal parses every type of "..." strings:
+        //  - normal -> "hello"
+        //  - empty  -> ""
+        //  - base escp  -> "\n", "\they"
+        //  - oct escp   -> "\000", "Hello \012"
+        //  - hex escp   -> "\x3F", "\xaa"
+        //  - utf16 escp -> "\u32aF"
+        //  - utf32 escp -> "\Ua34254DF"
         str_literal: $ => token(seq(
             '"',
             repeat(choice(
@@ -47,12 +59,20 @@ module.exports = grammar({
             '"',
         )),
 
+        // raw_str_literal parses raw strings -> `...`
         raw_str_literal: $ => token(seq(
             '`',
             repeat(/[^`]/),
             '`',
         )),
 
+        // char_literal parses every type of chars:
+        //  - normal     -> 'c'
+        //  - base escp  -> '\n'
+        //  - oct escp   -> '\000'
+        //  - hex escp   -> '\x3F', '\xaa'
+        //  - utf16 escp -> '\u32aF'
+        //  - utf32 escp -> '\Ua34254DF'
         char_literal: $ => token(seq(
             '\'',
             choice(
@@ -66,7 +86,12 @@ module.exports = grammar({
             '\'',
         )),
 
-
+        // int_literal parses every type of numbers:
+        //  - hex     -> 0xfA3, 0XFaac21
+        //  - decimal -> 10
+        //  - octal   -> 0o136, 0O137
+        //  - bin     -> 0b101, 0B1010
+        //  - zero    -> 0
         int_literal: $ => token(choice(
             seq('0', choice('x', 'X'), _digits(/[0-9a-fA-F]/)), // hexadecimal integer
             seq(/[1-9]/, _digits(/[0-9]/)),                     // decimal integer
@@ -75,11 +100,17 @@ module.exports = grammar({
             '0', // zero becouse is not a valid int literal '013' in octal or decimal base
         )),
 
+        // float_literal parses every type of floats:
+        //  - normal    -> 3.14
+        //  - no prefix -> .25
+        //  - no infix  -> 4.
+        //  - exp       -> 1e5, 1.34E-5, .25e+2
         float_literal: $ => token(seq(
             seq(
                 _digits(/[1-9]/),
                 '.',
-                optional(_digits(/[1-9]/), optional(_decimal_exp()))
+                optional(_digits(/[1-9]/)),
+                optional(_decimal_exp()),
             ),   // normal float -> 3.14 | 1. | 1.3e5
 
             seq(
