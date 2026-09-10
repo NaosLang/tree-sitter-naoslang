@@ -8,6 +8,7 @@ const literalExcept = ($, ...excluded) => {
         $.id_literal,
         $.str_literal,
         $.raw_str_literal,
+        $.char_literal,
         $.int_literal,
         $.float_literal,
     ];
@@ -50,6 +51,19 @@ module.exports = grammar({
             '`',
             repeat(/[^`]/),
             '`',
+        )),
+
+        char_literal: $ => token(seq(
+            '\'',
+            choice(
+                /[^'\\]+/,
+                /\\[abfnrtv\\']/,
+                /\\[0-7]{3}/,
+                /\\x[0-9a-fA-F]{2}/,
+                /\\u[0-9a-fA-F]{4}/,
+                /\\U[0-9a-fA-F]{8}/,
+            ),
+            '\'',
         )),
 
 
