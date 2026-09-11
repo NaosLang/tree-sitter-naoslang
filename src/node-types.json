@@ -50,7 +50,15 @@
             "named": true
           },
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           },
           {
@@ -86,7 +94,15 @@
             "named": true
           },
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           },
           {
@@ -142,7 +158,15 @@
             "named": true
           },
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           },
           {
@@ -158,9 +182,34 @@
     }
   },
   {
+    "type": "func_params_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "func_param_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "func_type",
     "named": true,
     "fields": {
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "func_params_type",
+            "named": true
+          }
+        ]
+      },
       "type": {
         "multiple": false,
         "required": false,
@@ -178,7 +227,15 @@
             "named": true
           },
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           },
           {
@@ -191,13 +248,44 @@
           }
         ]
       }
-    },
+    }
+  },
+  {
+    "type": "generic_params_type",
+    "named": true,
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "func_param_type",
+          "type": "id_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "generic_type",
+    "named": true,
+    "fields": {
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "generic_params_type",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "id_type",
           "named": true
         }
       ]
@@ -234,6 +322,32 @@
     "fields": {}
   },
   {
+    "type": "module_type",
+    "named": true,
+    "fields": {
+      "module": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "ptr_type",
     "named": true,
     "fields": {
@@ -254,7 +368,15 @@
             "named": true
           },
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           },
           {
@@ -290,7 +412,15 @@
             "named": true
           },
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           },
           {
@@ -331,11 +461,19 @@
           "named": true
         },
         {
+          "type": "generic_type",
+          "named": true
+        },
+        {
           "type": "global_import",
           "named": true
         },
         {
           "type": "id_type",
+          "named": true
+        },
+        {
+          "type": "module_type",
           "named": true
         },
         {
@@ -370,11 +508,23 @@
     "named": false
   },
   {
+    "type": ".",
+    "named": false
+  },
+  {
     "type": ";",
     "named": false
   },
   {
+    "type": "<",
+    "named": false
+  },
+  {
     "type": "=",
+    "named": false
+  },
+  {
+    "type": ">",
     "named": false
   },
   {

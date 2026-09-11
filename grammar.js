@@ -6,6 +6,8 @@ const typeExcept = ($, ...excluded) => {
         $.arr_type,
         $.slice_type,
         $.func_type,
+        $.module_type,
+        $.generic_type,
     ];
     return choice(...types.filter(t => !excluded.includes(t)))
 };
@@ -50,7 +52,7 @@ module.exports = grammar({
         // +---------+
 
         // func_param parses a function parameter -> [const] id: PTYPE
-        func_param: $ => seq(
+        func_param_literal: $ => seq(
             optional(field('const', prec(1, 'const'))),
             field('name', $.id_literal),
             ':',
@@ -68,6 +70,10 @@ module.exports = grammar({
             '->',
             field('type', $._primitive_type),
         ),
+
+        func_params_type: $ => _params_wrapper('(', $.func_param_type, ')'),
+        func_params_literal: $ => _params_wrapper('(', $.func_param_literal, ')'),
+        generic_params_type: $ => _params_wrapper('<', $.id_type, '>'),
 
 
         // struct_member parses a struct literal member -> id: [EXPR]
@@ -154,12 +160,20 @@ module.exports = grammar({
         // func_type parses function -> fn(PARAMS) [-> PTYPE]
         func_type: $ => seq(
             'fn',
-            '(',
-            optional(separatedBy(',', $.func_param_type)),
-            ')',
+            field('parameters', $.func_params_type),
             optional($._func_return),
         ),
 
+        module_type: $ => seq(
+            field('module', $.id_literal),
+            '.',
+            field('name', $.id_type),
+        ),
+
+        generic_type: $ => seq(
+            $.id_type,
+            field('parameters', $.generic_params_type),
+        ),
 
         // +----------+
         // | Literals |
@@ -272,11 +286,9 @@ module.exports = grammar({
         // func_literal parses lambda functions -> fn(PARAMS) [-> PTYPE] BLOCK
         func_literal: $ => seq(
             'fn',
-            '(',
-            optional(separatedBy(',', $.func_param)),
-            ')',
+            field('parameters', $.func_params_literal),
             optional($._func_return),
-            $.not_implemented_syntax, // block
+            field('block', $.not_implemented_syntax), // block
         ),
 
         // arr_literal parses arrrays -> [EXPR, ...]
@@ -288,7 +300,7 @@ module.exports = grammar({
 
         // slice_literal parses a creation of a slice -> SLICEABLE[EXPR:EXPR]
         slice_literal: $ => seq(
-            $._sliceable_literal,
+            field('sliceable', $._sliceable_literal),
             '[',
             optional(field('start', $.not_implemented_syntax)), // expression
             ':',
@@ -316,6 +328,14 @@ function _decimal_exp() {
         choice('e', 'E'),
         optional(choice('+', '-')),
         _digits(/[1-9]/)
+    )
+}
+
+function _params_wrapper(w1, parmaRule, w2) {
+    return seq(
+        w1,
+        optional(separatedBy(',', parmaRule)),
+        w2,
     )
 }
 
