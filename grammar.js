@@ -44,11 +44,17 @@ module.exports = grammar({
         // | Helpers |
         // +---------+
 
-        // func_param parses a function parameter -> id: PTYPE
+        // func_param parses a function parameter -> [const] id: PTYPE
         func_param: $ => seq(
-            field('const', optional('const')),
+            optional(field('const', prec(1, 'const'))),
             field('name', $.id_literal),
             ':',
+            field('type', $._primitive_type),
+        ),
+
+        // func_param_type parses a function parameter type -> [const] PTYPE
+        func_param_type: $ => seq(
+            optional(field('const', prec(1, 'const'))),
             field('type', $._primitive_type),
         ),
 
@@ -136,7 +142,7 @@ module.exports = grammar({
         func_type: $ => seq(
             'fn',
             '(',
-            optional(separatedBy(',', $.func_param)),
+            optional(separatedBy(',', $.func_param_type)),
             ')',
             optional($.func_return),
         ),
@@ -239,6 +245,15 @@ module.exports = grammar({
             ),  // exp float -> 1e5
 
         )),
+
+        func_literal: $ => seq(
+            'fn',
+            '(',
+            optional(separatedBy(',', $.func_param)),
+            ')',
+            optional($.func_return),
+            $.not_implemented_syntax, // block
+        ),
     }
 });
 

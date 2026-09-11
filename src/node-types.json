@@ -112,7 +112,7 @@
     }
   },
   {
-    "type": "func_param",
+    "type": "func_param_type",
     "named": true,
     "fields": {
       "const": {
@@ -122,16 +122,6 @@
           {
             "type": "const",
             "named": false
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "id_literal",
-            "named": true
           }
         ]
       },
@@ -212,7 +202,7 @@
       "required": false,
       "types": [
         {
-          "type": "func_param",
+          "type": "func_param_type",
           "named": true
         },
         {
@@ -386,10 +376,6 @@
   },
   {
     "type": "->",
-    "named": false
-  },
-  {
-    "type": ":",
     "named": false
   },
   {
