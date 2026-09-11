@@ -22,7 +22,6 @@ const literalExcept = ($, ...excluded) => {
         $.float_literal,
         $.func_literal,
         $.arr_literal,
-        $.slice_literal,
         $.struct_literal,
     ];
     return choice(...literals.filter(t => !excluded.includes(t)))
@@ -32,12 +31,18 @@ const literalExcept = ($, ...excluded) => {
 module.exports = grammar({
     name: 'naoslang',
 
+    conflicts: $ => [
+        [$.id_type, $.id_literal],
+        [$.func_literal_params, $.func_type_params],
+    ],
+
     rules: {
         source_file: $ => seq(
             // imports are valid only on top of the file
             repeat($._imports),
 
             repeat($._type),
+            repeat($._literal),
         ),
 
         // +------+
@@ -48,67 +53,11 @@ module.exports = grammar({
 
 
         // +---------+
-        // | Helpers |
-        // +---------+
-
-        // func_param parses a function parameter -> [const] id: PTYPE
-        func_param_literal: $ => seq(
-            optional(field('const', prec(1, 'const'))),
-            field('name', $.id_literal),
-            ':',
-            field('type', $._primitive_type),
-        ),
-
-        // func_param_type parses a function parameter type -> [const] PTYPE
-        func_param_type: $ => seq(
-            optional(field('const', prec(1, 'const'))),
-            field('type', $._primitive_type),
-        ),
-
-        // func_return parses the function return type -> -> PTYPE
-        _func_return: $ => seq(
-            '->',
-            field('type', $._primitive_type),
-        ),
-
-        func_params_type: $ => _params_wrapper('(', $.func_param_type, ')'),
-        func_params_literal: $ => _params_wrapper('(', $.func_param_literal, ')'),
-        generic_params_type: $ => _params_wrapper('<', $.id_type, '>'),
-
-
-        // struct_member parses a struct literal member -> id: [EXPR]
-        struct_member: $ => seq(
-            field('name', $.id_literal),
-            ':',
-            field('value', $.not_implemented_syntax), // expression
-        ),
-
-        // +---------+
         // | Imports |
         // +---------+
 
-        // _imports dispaches to any import decl
-        _imports: $ => choice(
-            $.global_import,
-            $.alias_import,
-        ),
+        _imports: $ => choice($.global_import, $.alias_import), // all imports
 
-        // global_import parses the global import decl -> using @import(PATH);
-        global_import: $ => seq(
-            'using',
-            $._generic_import,
-            ';'
-        ),
-
-        // alias_import parses the alias import decl -> id = @import(PATH);
-        alias_import: $ => seq(
-            field('alias', $.id_literal),
-            '=',
-            $._generic_import,
-            ';',
-        ),
-
-        // _generic_import parses the generic import decl -> @import(PATH)
         _generic_import: $ => seq(
             '@',
             'import',
@@ -117,93 +66,86 @@ module.exports = grammar({
             ')',
         ),
 
+        global_import: $ => seq('using', $._generic_import, ';'), // using @import(PATH);
+        alias_import: $ => seq(field('alias', $.id_literal), '=', $._generic_import, ';'), // id = @import(PATH);
+
 
         // +-------+
         // | Types |
         // +-------+
 
-        // _type dispaches t any type
-        _type: $ => typeExcept($),
+        _type: $ => typeExcept($), // all types
+        _primitive_type: $ => typeExcept($), // all types expect interfaces and structs
 
-        // _primitive_type dispaches only simple type (all types but struct and interfaces)
-        _primitive_type: $ => typeExcept($),
 
-        // its the same as the id_literal but is used in type only context
+
         id_type: $ => token(/[a-zA-Z_][a-zA-Z0-9_-]*/),
-
-        // ptr_type parses pointers -> *PTYPE
         ptr_type: $ => seq(
             '*',
-            field('base', $._primitive_type),
-        ),
+            optional(field('const', prec(1, 'const'))),
+            field('base', $._primitive_type)
+        ), // *PTYPE
 
-        // arr_ptr_type parses array pointers -> [*]PTYPE
+
+
         arr_ptr_type: $ => seq(
             '[*]',
-            field('base', $._primitive_type),
-        ),
+            optional(field('const', prec(1, 'const'))),
+            field('base', $._primitive_type)
+        ), // [*]PTYPE
 
-        // arr_type parses arrays -> [N]PTYPE
+        slice_type: $ => seq(
+            '[]',
+            optional(field('const', prec(1, 'const'))),
+            field('base', $._primitive_type)
+        ), // []PTYPE
+
         arr_type: $ => seq(
             '[',
             field('size', $.int_literal),
             ']',
+            optional(field('const', prec(1, 'const'))),
             field('base', $._primitive_type),
+        ), // [N]PTYPE
+
+
+
+        func_type_param: $ => seq(
+            optional(field('const', prec(1, 'const'))),
+            field('type', $._primitive_type),
         ),
 
-        // slice_type parses slices -> []PTYPE
-        slice_type: $ => seq(
-            '[]',
-            field('base', $._primitive_type),
-        ),
+        func_type_params: $ => _params_wrapper('(', $.func_type_param, ')'),
+        _func_type_return: $ => seq('->', field('return', $._primitive_type)),
 
-        // func_type parses function -> fn(PARAMS) [-> PTYPE]
         func_type: $ => seq(
             'fn',
-            field('parameters', $.func_params_type),
-            optional($._func_return),
-        ),
+            field('parameters', $.func_type_params),
+            optional($._func_type_return),
+        ), // fn(PARAMS) -> PTYPE
 
-        module_type: $ => seq(
-            field('module', $.id_literal),
-            '.',
-            field('name', $.id_type),
-        ),
 
-        generic_type: $ => seq(
-            $.id_type,
-            field('parameters', $.generic_params_type),
-        ),
+
+        module_type: $ => seq(field('module', $.id_literal), '.', field('type', $.id_type)), // id.id
+
+
+
+        genric_type_params: $ => _params_wrapper('<', $._primitive_type, '>'),
+        generic_type: $ => seq(field('name', $.id_type), field('parameters', $.genric_type_params)), // id<PTYPE...>
 
         // +----------+
         // | Literals |
         // +----------+
 
-        // _literal dispaches to any literal parse token
-        _literal: $ => literalExcept($),
-        _sliceable_literal: $ => choice(
-            $.str_literal,
-            $.raw_str_literal,
-            $.arr_literal,
-            $.slice_literal,
-        ),
-        _nestable_literal: $ => choice(
-            $.id_literal,
-            $.struct_literal,
-        ),
+        _literal: $ => literalExcept($), // all literals
+        _nestable_literal: $ => choice($.id_literal, $.struct_literal, $.nested_literal), // all literals that support the id.LIT
 
 
-        // id_literal parses every identifier (variable names or type names)
+
         id_literal: $ => token(/[a-zA-Z_][a-zA-Z0-9_-]*/),
 
-        // str_literal parses every type of "..." strings:
-        //  - normal -> "hello"
-        //  - empty  -> ""
-        //  - base escp  -> "\n", "\they"
-        //  - oct escp   -> "\000", "Hello \012"
-        //  - hex escp   -> "\x3F", "\xaa"
-        //  - utf16 escp -> "\u32aF"
-        //  - utf32 escp -> "\Ua34254DF"
+
+
         str_literal: $ => token(seq(
             '"',
             repeat(choice(
@@ -217,20 +159,12 @@ module.exports = grammar({
             '"',
         )),
 
-        // raw_str_literal parses raw strings -> `...`
         raw_str_literal: $ => token(seq(
             '`',
             repeat(/[^`]/),
             '`',
         )),
 
-        // char_literal parses every type of chars:
-        //  - normal     -> 'c'
-        //  - base escp  -> '\n'
-        //  - oct escp   -> '\000'
-        //  - hex escp   -> '\x3F', '\xaa'
-        //  - utf16 escp -> '\u32aF'
-        //  - utf32 escp -> '\Ua34254DF'
         char_literal: $ => token(seq(
             '\'',
             choice(
@@ -244,12 +178,8 @@ module.exports = grammar({
             '\'',
         )),
 
-        // int_literal parses every type of numbers:
-        //  - hex     -> 0xfA3, 0XFaac21
-        //  - decimal -> 10
-        //  - octal   -> 0o136, 0O137
-        //  - bin     -> 0b101, 0B1010
-        //  - zero    -> 0
+
+
         int_literal: $ => token(choice(
             seq('0', choice('x', 'X'), _digits(/[0-9a-fA-F]/)), // hexadecimal integer
             seq(/[1-9]/, repeat(_digits(/[0-9]/))),                     // decimal integer
@@ -258,11 +188,6 @@ module.exports = grammar({
             '0', // zero becouse is not a valid int literal '013' in octal or decimal base
         )),
 
-        // float_literal parses every type of floats:
-        //  - normal    -> 3.14
-        //  - no prefix -> .25
-        //  - no infix  -> 4.
-        //  - exp       -> 1e5, 1.34E-5, .25e+2
         float_literal: $ => token(seq(
             seq(
                 _digits(/[0-9]/),
@@ -283,36 +208,49 @@ module.exports = grammar({
 
         )),
 
-        // func_literal parses lambda functions -> fn(PARAMS) [-> PTYPE] BLOCK
+
+
+        func_literal_param: $ => seq(
+            optional(field('const', prec(1, 'const'))),
+            field('name', $.id_literal),
+            ':',
+            field('type', $.id_type),
+        ),
+
+        func_literal_params: $ => _params_wrapper('(', $.func_literal_param, ')'),
+        _func_literal_return: $ => seq('->', $._primitive_type),
+
         func_literal: $ => seq(
             'fn',
-            field('parameters', $.func_params_literal),
-            optional($._func_return),
+            field('parameters', $.func_literal_params),
+            optional($._func_literal_return),
             field('block', $.not_implemented_syntax), // block
         ),
 
-        // arr_literal parses arrrays -> [EXPR, ...]
-        arr_literal: $ => seq(
-            '[',
-            repeat($.not_implemented_syntax), // expression
-            ']',
+
+
+        arr_literal: $ => seq('[', repeat($.not_implemented_syntax), ']'),
+
+
+
+        struct_literal_member: $ => seq(
+            field('name', $.id_literal),
+            ':',
+            field('value', $.not_implemented_syntax) // expression
         ),
 
-        // slice_literal parses a creation of a slice -> SLICEABLE[EXPR:EXPR]
-        slice_literal: $ => seq(
-            field('sliceable', $._sliceable_literal),
-            '[',
-            optional(field('start', $.not_implemented_syntax)), // expression
-            ':',
-            optional(field('end', $.not_implemented_syntax)), // expression
-            ']',
-        ),
+        struct_literal_members: $ => _params_wrapper('{', $.struct_literal_member, '}', true),
 
         struct_literal: $ => seq(
             field('name', $.id_literal),
-            '{',
-            optional(separatedByTrailing(',', $.struct_member)),
-            '}',
+            field('members', $.struct_literal_members),
+        ),
+
+
+
+        nested_literal: $ => seq(
+            field('name', $.id_literal),
+            field('nested', $._nestable_literal),
         ),
     }
 });
@@ -331,12 +269,11 @@ function _decimal_exp() {
     )
 }
 
-function _params_wrapper(w1, parmaRule, w2) {
-    return seq(
-        w1,
-        optional(separatedBy(',', parmaRule)),
-        w2,
-    )
+function _params_wrapper(w1, parmaRule, w2, trailing) {
+    if (trailing) {
+        return seq(w1, optional(separatedByTrailing(',', parmaRule)), w2)
+    }
+    return seq(w1, optional(separatedBy(',', parmaRule)), w2)
 }
 
 function separatedBy(sep, rule) {
