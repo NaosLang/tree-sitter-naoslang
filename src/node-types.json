@@ -30,6 +30,199 @@
     }
   },
   {
+    "type": "arr_ptr_type",
+    "named": true,
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "arr_type",
+    "named": true,
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      },
+      "size": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "int_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "func_param",
+    "named": true,
+    "fields": {
+      "const": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "const",
+            "named": false
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "func_return",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "func_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "func_param",
+          "named": true
+        },
+        {
+          "type": "func_return",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "global_import",
     "named": true,
     "fields": {
@@ -50,6 +243,88 @@
     }
   },
   {
+    "type": "id_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "id_type",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "ptr_type",
+    "named": true,
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "slice_type",
+    "named": true,
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -63,11 +338,15 @@
           "named": true
         },
         {
-          "type": "char_literal",
+          "type": "arr_ptr_type",
           "named": true
         },
         {
-          "type": "float_literal",
+          "type": "arr_type",
+          "named": true
+        },
+        {
+          "type": "func_type",
           "named": true
         },
         {
@@ -75,19 +354,15 @@
           "named": true
         },
         {
-          "type": "id_literal",
+          "type": "id_type",
           "named": true
         },
         {
-          "type": "int_literal",
+          "type": "ptr_type",
           "named": true
         },
         {
-          "type": "raw_str_literal",
-          "named": true
-        },
-        {
-          "type": "str_literal",
+          "type": "slice_type",
           "named": true
         }
       ]
@@ -99,6 +374,22 @@
   },
   {
     "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": "->",
+    "named": false
+  },
+  {
+    "type": ":",
     "named": false
   },
   {
@@ -114,16 +405,28 @@
     "named": false
   },
   {
-    "type": "char_literal",
-    "named": true
+    "type": "[",
+    "named": false
   },
   {
-    "type": "float_literal",
-    "named": true
+    "type": "[*]",
+    "named": false
   },
   {
-    "type": "id_literal",
-    "named": true
+    "type": "[]",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "const",
+    "named": false
+  },
+  {
+    "type": "fn",
+    "named": false
   },
   {
     "type": "import",

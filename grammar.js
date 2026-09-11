@@ -1,5 +1,12 @@
 const typeExcept = ($, ...excluded) => {
-    const types = [];
+    const types = [
+        $.id_type,
+        $.ptr_type,
+        $.arr_ptr_type,
+        $.arr_type,
+        $.slice_type,
+        $.func_type,
+    ];
     return choice(...types.filter(t => !excluded.includes(t)))
 };
 
@@ -23,7 +30,7 @@ module.exports = grammar({
             // imports are valid only on top of the file
             repeat($._imports),
 
-            repeat($._literal),
+            repeat($._type),
         ),
 
         // +------+
@@ -32,6 +39,24 @@ module.exports = grammar({
 
         not_implemented_syntax: $ => token('\0'),
 
+
+        // +---------+
+        // | Helpers |
+        // +---------+
+
+        // func_param parses a function parameter -> id: PTYPE
+        func_param: $ => seq(
+            field('const', optional('const')),
+            field('name', $.id_literal),
+            ':',
+            field('type', $._primitive_type),
+        ),
+
+        // func_return parses the function return type -> -> PTYPE
+        func_return: $ => seq(
+            '->',
+            field('type', $._primitive_type),
+        ),
 
         // +---------+
         // | Imports |
@@ -68,6 +93,55 @@ module.exports = grammar({
         ),
 
 
+        // +-------+
+        // | Types |
+        // +-------+
+
+        // _type dispaches t any type
+        _type: $ => typeExcept($),
+
+        // _primitive_type dispaches only simple type (all types but struct and interfaces)
+        _primitive_type: $ => typeExcept($),
+
+        // its the same as the id_literal but is used in type only context
+        id_type: $ => token(/[a-zA-Z_][a-zA-Z0-9_-]*/),
+
+        // ptr_type parses pointers -> *PTYPE
+        ptr_type: $ => seq(
+            '*',
+            field('base', $._primitive_type),
+        ),
+
+        // arr_ptr_type parses array pointers -> [*]PTYPE
+        arr_ptr_type: $ => seq(
+            '[*]',
+            field('base', $._primitive_type),
+        ),
+
+        // arr_type parses arrays -> [N]PTYPE
+        arr_type: $ => seq(
+            '[',
+            field('size', $.int_literal),
+            ']',
+            field('base', $._primitive_type),
+        ),
+
+        // slice_type parses slices -> []PTYPE
+        slice_type: $ => seq(
+            '[]',
+            field('base', $._primitive_type),
+        ),
+
+        // func_type parses function -> fn(PARAMS) [-> PTYPE]
+        func_type: $ => seq(
+            'fn',
+            '(',
+            optional(separatedBy(',', $.func_param)),
+            ')',
+            optional($.func_return),
+        ),
+
+
         // +----------+
         // | Literals |
         // +----------+
@@ -77,7 +151,7 @@ module.exports = grammar({
 
 
         // id_literal parses every identifier (variable names or type names)
-        id_literal: $ => token(/[a-zA-Z_][a-z-A-Z0-9_]*/),
+        id_literal: $ => token(/[a-zA-Z_][a-zA-Z0-9_-]*/),
 
         // str_literal parses every type of "..." strings:
         //  - normal -> "hello"
@@ -135,7 +209,7 @@ module.exports = grammar({
         //  - zero    -> 0
         int_literal: $ => token(choice(
             seq('0', choice('x', 'X'), _digits(/[0-9a-fA-F]/)), // hexadecimal integer
-            seq(/[1-9]/, _digits(/[0-9]/)),                     // decimal integer
+            seq(/[1-9]/, repeat(_digits(/[0-9]/))),                     // decimal integer
             seq('0', choice('o', 'O'), _digits(/[0-7]/)),       // octal integer
             seq('0', choice('b', 'B'), _digits(/[0-1]/)),       // binary integer
             '0', // zero becouse is not a valid int literal '013' in octal or decimal base
@@ -148,19 +222,19 @@ module.exports = grammar({
         //  - exp       -> 1e5, 1.34E-5, .25e+2
         float_literal: $ => token(seq(
             seq(
-                _digits(/[1-9]/),
+                _digits(/[0-9]/),
                 '.',
-                optional(_digits(/[1-9]/)),
+                optional(_digits(/[0-9]/)),
                 optional(_decimal_exp()),
             ),   // normal float -> 3.14 | 1. | 1.3e5
 
             seq(
                 '.',
-                _digits(/[1-9]/),
+                _digits(/[0-9]/),
                 optional(_decimal_exp())
             ),  // no start float -> .13 | .3e5
             seq(
-                _digits(/[1-9]/),
+                _digits(/[0-9]/),
                 _decimal_exp()
             ),  // exp float -> 1e5
 
