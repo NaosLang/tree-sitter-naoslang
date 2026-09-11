@@ -158,12 +158,12 @@
     }
   },
   {
-    "type": "func_return",
+    "type": "func_type",
     "named": true,
     "fields": {
       "type": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "arr_ptr_type",
@@ -191,22 +191,13 @@
           }
         ]
       }
-    }
-  },
-  {
-    "type": "func_type",
-    "named": true,
-    "fields": {},
+    },
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
           "type": "func_param_type",
-          "named": true
-        },
-        {
-          "type": "func_return",
           "named": true
         }
       ]

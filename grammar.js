@@ -18,9 +18,14 @@ const literalExcept = ($, ...excluded) => {
         $.char_literal,
         $.int_literal,
         $.float_literal,
+        $.func_literal,
+        $.arr_literal,
+        $.slice_literal,
+        $.struct_literal,
     ];
     return choice(...literals.filter(t => !excluded.includes(t)))
 };
+
 
 module.exports = grammar({
     name: 'naoslang',
@@ -59,9 +64,17 @@ module.exports = grammar({
         ),
 
         // func_return parses the function return type -> -> PTYPE
-        func_return: $ => seq(
+        _func_return: $ => seq(
             '->',
             field('type', $._primitive_type),
+        ),
+
+
+        // struct_member parses a struct literal member -> id: [EXPR]
+        struct_member: $ => seq(
+            field('name', $.id_literal),
+            ':',
+            field('value', $.not_implemented_syntax), // expression
         ),
 
         // +---------+
@@ -144,7 +157,7 @@ module.exports = grammar({
             '(',
             optional(separatedBy(',', $.func_param_type)),
             ')',
-            optional($.func_return),
+            optional($._func_return),
         ),
 
 
@@ -154,6 +167,16 @@ module.exports = grammar({
 
         // _literal dispaches to any literal parse token
         _literal: $ => literalExcept($),
+        _sliceable_literal: $ => choice(
+            $.str_literal,
+            $.raw_str_literal,
+            $.arr_literal,
+            $.slice_literal,
+        ),
+        _nestable_literal: $ => choice(
+            $.id_literal,
+            $.struct_literal,
+        ),
 
 
         // id_literal parses every identifier (variable names or type names)
@@ -246,13 +269,38 @@ module.exports = grammar({
 
         )),
 
+        // func_literal parses lambda functions -> fn(PARAMS) [-> PTYPE] BLOCK
         func_literal: $ => seq(
             'fn',
             '(',
             optional(separatedBy(',', $.func_param)),
             ')',
-            optional($.func_return),
+            optional($._func_return),
             $.not_implemented_syntax, // block
+        ),
+
+        // arr_literal parses arrrays -> [EXPR, ...]
+        arr_literal: $ => seq(
+            '[',
+            repeat($.not_implemented_syntax), // expression
+            ']',
+        ),
+
+        // slice_literal parses a creation of a slice -> SLICEABLE[EXPR:EXPR]
+        slice_literal: $ => seq(
+            $._sliceable_literal,
+            '[',
+            optional(field('start', $.not_implemented_syntax)), // expression
+            ':',
+            optional(field('end', $.not_implemented_syntax)), // expression
+            ']',
+        ),
+
+        struct_literal: $ => seq(
+            field('name', $.id_literal),
+            '{',
+            optional(separatedByTrailing(',', $.struct_member)),
+            '}',
         ),
     }
 });
