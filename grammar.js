@@ -8,6 +8,8 @@ const typeExcept = ($, ...excluded) => {
         $.func_type,
         $.module_type,
         $.generic_type,
+        $.struct_type,
+        $.interface_type,
     ];
     return choice(...types.filter(t => !excluded.includes(t)))
 };
@@ -32,17 +34,17 @@ module.exports = grammar({
     name: 'naoslang',
 
     conflicts: $ => [
-        [$.id_type, $.id_literal],
-        [$.func_literal_params, $.func_type_params],
     ],
 
     rules: {
         source_file: $ => seq(
             // imports are valid only on top of the file
             repeat($._imports),
+            repeat($._program),
+        ),
 
-            repeat($._type),
-            repeat($._literal),
+        _program: $ => choice(
+            $._new_type,
         ),
 
         // +------+
@@ -51,6 +53,53 @@ module.exports = grammar({
 
         not_implemented_syntax: $ => token('\0'),
 
+        generic_def_params: $ => _params_wrapper('<', $.id_type_pair, '>'),
+        id_type_pair: $ => seq(
+            field('name', $.id_literal),
+            ':',
+            field('type', $._primitive_type),
+        ),
+
+        // +-----------+
+        // | New Types |
+        // +-----------+
+
+        _new_type: $ => choice(
+            $.alias_type,
+            $.new_type,
+        ),
+
+        alias_type: $ => seq(
+            optional(field('pub', 'pub')),
+            'type',
+            field('name', $.id_literal),
+            '=',
+            field('base', $._primitive_type),
+            ';',
+        ),
+
+        new_type: $ => seq(
+            optional(field('pub', 'pub')),
+            'type',
+            field('name', $.id_literal),
+            optional(field('generic_params', $.generic_def_params)),
+            '::',
+            field('base', $._type),
+            ';',
+        ),
+
+
+        // +--------------+
+        // | Function Def |
+        // +--------------+
+
+        func_sign: $ => seq(
+            'fn',
+            field('name', $.id_literal),
+            optional(field('generic_params', $.generic_def_params)),
+            field('parameters', $.func_literal_params),
+            optional($._func_literal_return),
+        ),
 
         // +---------+
         // | Imports |
@@ -132,6 +181,37 @@ module.exports = grammar({
 
         genric_type_params: $ => _params_wrapper('<', $._primitive_type, '>'),
         generic_type: $ => seq(field('name', $.id_type), field('parameters', $.genric_type_params)), // id<PTYPE...>
+
+
+        struct_type_members: $ => _params_wrapper('{', optional($.id_type_pair), '}'),
+        struct_type: $ => seq(
+            'struct',
+            field('struct_members', $.struct_type_members)
+        ),
+
+
+
+        _interface_type_members: $ => choice(
+            $.interface_type_members,
+            seq(
+                'type',
+                field('interface_types', $.interface_typed_type_members),
+            ),
+        ),
+
+        interface_typed_type_members: $ => seq(
+            separatedBy('|', $._primitive_type),
+            optional(','),
+        ),
+
+        interface_type_members: $ => separatedByTrailing(',', choice($.id_literal, $.func_sign)),
+
+        interface_type: $ => seq(
+            'interface',
+            '{',
+            optional(field('interface_members', $._interface_type_members)),
+            '}',
+        ),
 
         // +----------+
         // | Literals |
@@ -218,7 +298,7 @@ module.exports = grammar({
         ),
 
         func_literal_params: $ => _params_wrapper('(', $.func_literal_param, ')'),
-        _func_literal_return: $ => seq('->', $._primitive_type),
+        _func_literal_return: $ => seq('->', field('return', $._primitive_type)),
 
         func_literal: $ => seq(
             'fn',
