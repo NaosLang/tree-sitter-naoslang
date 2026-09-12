@@ -246,6 +246,36 @@
     }
   },
   {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "block_statements",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block_statements",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "local_variable_def",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "compiler_attribute",
     "named": true,
     "fields": {
@@ -344,18 +374,24 @@
             "named": true
           }
         ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
           "type": "func_sign",
-          "named": true
-        },
-        {
-          "type": "not_implemented_syntax",
           "named": true
         }
       ]
@@ -1022,6 +1058,92 @@
         },
         {
           "type": "struct_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "local_variable_def",
+    "named": true,
+    "fields": {
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "const",
+            "named": false
+          },
+          {
+            "type": "let",
+            "named": false
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "interface_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          },
+          {
+            "type": "struct_type",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "not_implemented_syntax",
           "named": true
         }
       ]

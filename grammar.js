@@ -1,3 +1,11 @@
+const exprExcept = ($, ...excluded) => {
+    const exprs = [
+
+    ];
+
+    return choice(...exprs.filter(e => !excluded.includes(e)))
+}
+
 const typeExcept = ($, ...excluded) => {
     const types = [
         $.id_type,
@@ -141,7 +149,7 @@ module.exports = grammar({
         func_def: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
             $.func_sign,
-            $.not_implemented_syntax, // block
+            field('body', $.block)
         ),
 
         func_sign: $ => seq(
@@ -175,6 +183,34 @@ module.exports = grammar({
             '=',
             field('value', $._string_literal),
         ),
+
+        // +-------+
+        // | Block |
+        // +-------+
+
+        block: $ => seq(
+            '{',
+            optional($.block_statements),
+            '}',
+        ),
+
+        block_statements: $ => repeat1($._statement),
+
+
+        // +------------+
+        // | Statements |
+        // +------------+
+
+        _statement: $ => choice(
+            $.local_variable_def,
+        ),
+
+        // +-------------+
+        // | Expressions |
+        // +-------------+
+
+        _expressions: $ => exprExcept($),
+        _value_expressions: $ => exprExcept($),
 
         // +---------+
         // | Imports |
@@ -380,7 +416,7 @@ module.exports = grammar({
             'fn',
             field('parameters', $.func_literal_params),
             optional($._func_literal_return),
-            field('block', $.not_implemented_syntax), // block
+            field('body', $.block),
         ),
 
 
@@ -611,7 +647,7 @@ function separatedByTrailing(sep, rule) {
 //             $.return_statement,
 //             $.assignment_statement,
 //             $.update_statement,
-//             $.break_statement,
+//        $.break_statement,
 //             $.defer_statement,
 //             $.continue_statement,
 //             $.loop_statement,
