@@ -104,8 +104,8 @@
         "required": false,
         "types": [
           {
-            "type": "pub",
-            "named": false
+            "type": "pub_keyword",
+            "named": true
           }
         ]
       }
@@ -181,8 +181,8 @@
         "required": false,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           }
         ]
       }
@@ -243,8 +243,8 @@
         "required": false,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           }
         ]
       },
@@ -355,80 +355,28 @@
         "required": true,
         "types": [
           {
-            "type": "!=",
-            "named": false
+            "type": "prec1_operators",
+            "named": true
           },
           {
-            "type": "%",
-            "named": false
+            "type": "prec2_operators",
+            "named": true
           },
           {
-            "type": "&",
-            "named": false
+            "type": "prec3_operators",
+            "named": true
           },
           {
-            "type": "&&",
-            "named": false
+            "type": "prec4_operators",
+            "named": true
           },
           {
-            "type": "&^",
-            "named": false
+            "type": "prec5_operators",
+            "named": true
           },
           {
-            "type": "*",
-            "named": false
-          },
-          {
-            "type": "+",
-            "named": false
-          },
-          {
-            "type": "-",
-            "named": false
-          },
-          {
-            "type": "/",
-            "named": false
-          },
-          {
-            "type": "<",
-            "named": false
-          },
-          {
-            "type": "<<",
-            "named": false
-          },
-          {
-            "type": "<=",
-            "named": false
-          },
-          {
-            "type": "==",
-            "named": false
-          },
-          {
-            "type": ">",
-            "named": false
-          },
-          {
-            "type": ">=",
-            "named": false
-          },
-          {
-            "type": ">>",
-            "named": false
-          },
-          {
-            "type": "^",
-            "named": false
-          },
-          {
-            "type": "|",
-            "named": false
-          },
-          {
-            "type": "||",
-            "named": false
+            "type": "prec6_operators",
+            "named": true
           }
         ]
       },
@@ -1037,6 +985,16 @@
             "named": true
           }
         ]
+      },
+      "pub": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pub_keyword",
+            "named": true
+          }
+        ]
       }
     },
     "children": {
@@ -1131,8 +1089,8 @@
         "required": false,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           }
         ]
       },
@@ -1326,8 +1284,8 @@
         "required": false,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           }
         ]
       },
@@ -1419,6 +1377,10 @@
         "types": [
           {
             "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
             "named": true
           }
         ]
@@ -1525,12 +1487,12 @@
         "required": true,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           },
           {
-            "type": "let",
-            "named": false
+            "type": "let_keyword",
+            "named": true
           }
         ]
       },
@@ -1549,8 +1511,8 @@
         "required": false,
         "types": [
           {
-            "type": "pub",
-            "named": false
+            "type": "pub_keyword",
+            "named": true
           }
         ]
       },
@@ -1689,14 +1651,19 @@
     }
   },
   {
-    "type": "id_literal",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "id_type",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "id_type",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "id_type_pair",
@@ -2051,12 +2018,12 @@
         "required": true,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           },
           {
-            "type": "let",
-            "named": false
+            "type": "let_keyword",
+            "named": true
           }
         ]
       },
@@ -2457,12 +2424,32 @@
         "required": false,
         "types": [
           {
-            "type": "pub",
-            "named": false
+            "type": "pub_keyword",
+            "named": true
           }
         ]
       }
     }
+  },
+  {
+    "type": "prec3_operators",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "prec4_operators",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "prec5_operators",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "prec6_operators",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "ptr_type",
@@ -2519,8 +2506,8 @@
         "required": false,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           }
         ]
       }
@@ -2845,8 +2832,8 @@
         "required": false,
         "types": [
           {
-            "type": "const",
-            "named": false
+            "type": "const_keyword",
+            "named": true
           }
         ]
       }
@@ -2922,6 +2909,16 @@
     "type": "struct_literal_member",
     "named": true,
     "fields": {
+      "const": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "const_keyword",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -3145,10 +3142,6 @@
     "named": false
   },
   {
-    "type": "&&",
-    "named": false
-  },
-  {
     "type": "&^",
     "named": false
   },
@@ -3269,8 +3262,8 @@
     "named": true
   },
   {
-    "type": "const",
-    "named": false
+    "type": "const_keyword",
+    "named": true
   },
   {
     "type": "extends",
@@ -3285,6 +3278,10 @@
     "named": false
   },
   {
+    "type": "id_literal",
+    "named": true
+  },
+  {
     "type": "import",
     "named": false
   },
@@ -3297,16 +3294,24 @@
     "named": false
   },
   {
-    "type": "let",
-    "named": false
+    "type": "let_keyword",
+    "named": true
   },
   {
     "type": "not_implemented_syntax",
     "named": true
   },
   {
-    "type": "pub",
-    "named": false
+    "type": "prec1_operators",
+    "named": true
+  },
+  {
+    "type": "prec2_operators",
+    "named": true
+  },
+  {
+    "type": "pub_keyword",
+    "named": true
   },
   {
     "type": "raw_str_literal",
@@ -3334,10 +3339,6 @@
   },
   {
     "type": "|",
-    "named": false
-  },
-  {
-    "type": "||",
     "named": false
   },
   {

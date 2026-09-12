@@ -1,6 +1,7 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "naoslang",
+  "word": "id_literal",
   "rules": {
     "source_file": {
       "type": "SEQ",
@@ -47,6 +48,39 @@
       "content": {
         "type": "STRING",
         "value": "\u0000"
+      }
+    },
+    "pub_keyword": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "STRING",
+          "value": "pub"
+        }
+      }
+    },
+    "const_keyword": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "STRING",
+          "value": "const"
+        }
+      }
+    },
+    "let_keyword": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "STRING",
+          "value": "let"
+        }
       }
     },
     "generic_def_params": {
@@ -216,8 +250,8 @@
               "type": "FIELD",
               "name": "pub",
               "content": {
-                "type": "STRING",
-                "value": "pub"
+                "type": "SYMBOL",
+                "name": "pub_keyword"
               }
             },
             {
@@ -281,8 +315,8 @@
               "type": "FIELD",
               "name": "pub",
               "content": {
-                "type": "STRING",
-                "value": "pub"
+                "type": "SYMBOL",
+                "name": "pub_keyword"
               }
             },
             {
@@ -362,8 +396,8 @@
               "type": "FIELD",
               "name": "pub",
               "content": {
-                "type": "STRING",
-                "value": "pub"
+                "type": "SYMBOL",
+                "name": "pub_keyword"
               }
             },
             {
@@ -391,12 +425,12 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "STRING",
-                "value": "const"
+                "type": "SYMBOL",
+                "name": "const_keyword"
               },
               {
-                "type": "STRING",
-                "value": "let"
+                "type": "SYMBOL",
+                "name": "let_keyword"
               }
             ]
           }
@@ -459,6 +493,22 @@
               "content": {
                 "type": "SYMBOL",
                 "name": "compiler_attributes"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "pub",
+              "content": {
+                "type": "SYMBOL",
+                "name": "pub_keyword"
               }
             },
             {
@@ -1115,6 +1165,102 @@
         }
       ]
     },
+    "prec6_operators": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "*"
+        },
+        {
+          "type": "STRING",
+          "value": "/"
+        },
+        {
+          "type": "STRING",
+          "value": "%"
+        }
+      ]
+    },
+    "prec5_operators": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "+"
+        },
+        {
+          "type": "STRING",
+          "value": "-"
+        },
+        {
+          "type": "STRING",
+          "value": "|"
+        },
+        {
+          "type": "STRING",
+          "value": "^"
+        },
+        {
+          "type": "STRING",
+          "value": "&^"
+        },
+        {
+          "type": "STRING",
+          "value": "&"
+        }
+      ]
+    },
+    "prec4_operators": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "<<"
+        },
+        {
+          "type": "STRING",
+          "value": ">>"
+        }
+      ]
+    },
+    "prec3_operators": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "=="
+        },
+        {
+          "type": "STRING",
+          "value": "!="
+        },
+        {
+          "type": "STRING",
+          "value": "<"
+        },
+        {
+          "type": "STRING",
+          "value": ">"
+        },
+        {
+          "type": "STRING",
+          "value": "<="
+        },
+        {
+          "type": "STRING",
+          "value": ">="
+        }
+      ]
+    },
+    "prec2_operators": {
+      "type": "STRING",
+      "value": "&&"
+    },
+    "prec1_operators": {
+      "type": "STRING",
+      "value": "||"
+    },
     "binary_expression": {
       "type": "CHOICE",
       "members": [
@@ -1136,21 +1282,8 @@
                 "type": "FIELD",
                 "name": "op",
                 "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "*"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "/"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "%"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "prec6_operators"
                 }
               },
               {
@@ -1182,33 +1315,8 @@
                 "type": "FIELD",
                 "name": "op",
                 "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "+"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "-"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "|"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "^"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "&^"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "&"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "prec5_operators"
                 }
               },
               {
@@ -1240,17 +1348,8 @@
                 "type": "FIELD",
                 "name": "op",
                 "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "<<"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": ">>"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "prec4_operators"
                 }
               },
               {
@@ -1282,33 +1381,8 @@
                 "type": "FIELD",
                 "name": "op",
                 "content": {
-                  "type": "CHOICE",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "=="
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "!="
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "<"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": ">"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "<="
-                    },
-                    {
-                      "type": "STRING",
-                      "value": ">="
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "prec3_operators"
                 }
               },
               {
@@ -1340,8 +1414,8 @@
                 "type": "FIELD",
                 "name": "op",
                 "content": {
-                  "type": "STRING",
-                  "value": "&&"
+                  "type": "SYMBOL",
+                  "name": "prec2_operators"
                 }
               },
               {
@@ -1373,8 +1447,8 @@
                 "type": "FIELD",
                 "name": "op",
                 "content": {
-                  "type": "STRING",
-                  "value": "||"
+                  "type": "SYMBOL",
+                  "name": "prec1_operators"
                 }
               },
               {
@@ -1648,11 +1722,13 @@
       ]
     },
     "id_type": {
-      "type": "TOKEN",
+      "type": "ALIAS",
       "content": {
-        "type": "PATTERN",
-        "value": "[a-zA-Z_][a-zA-Z0-9_-]*"
-      }
+        "type": "SYMBOL",
+        "name": "id_literal"
+      },
+      "named": true,
+      "value": "id_type"
     },
     "ptr_type": {
       "type": "SEQ",
@@ -1668,12 +1744,8 @@
               "type": "FIELD",
               "name": "const",
               "content": {
-                "type": "PREC",
-                "value": 1,
-                "content": {
-                  "type": "STRING",
-                  "value": "const"
-                }
+                "type": "SYMBOL",
+                "name": "const_keyword"
               }
             },
             {
@@ -1705,12 +1777,8 @@
               "type": "FIELD",
               "name": "const",
               "content": {
-                "type": "PREC",
-                "value": 1,
-                "content": {
-                  "type": "STRING",
-                  "value": "const"
-                }
+                "type": "SYMBOL",
+                "name": "const_keyword"
               }
             },
             {
@@ -1742,12 +1810,8 @@
               "type": "FIELD",
               "name": "const",
               "content": {
-                "type": "PREC",
-                "value": 1,
-                "content": {
-                  "type": "STRING",
-                  "value": "const"
-                }
+                "type": "SYMBOL",
+                "name": "const_keyword"
               }
             },
             {
@@ -1791,12 +1855,8 @@
               "type": "FIELD",
               "name": "const",
               "content": {
-                "type": "PREC",
-                "value": 1,
-                "content": {
-                  "type": "STRING",
-                  "value": "const"
-                }
+                "type": "SYMBOL",
+                "name": "const_keyword"
               }
             },
             {
@@ -1824,12 +1884,8 @@
               "type": "FIELD",
               "name": "const",
               "content": {
-                "type": "PREC",
-                "value": 1,
-                "content": {
-                  "type": "STRING",
-                  "value": "const"
-                }
+                "type": "SYMBOL",
+                "name": "const_keyword"
               }
             },
             {
@@ -2017,8 +2073,17 @@
           "type": "FIELD",
           "name": "name",
           "content": {
-            "type": "SYMBOL",
-            "name": "id_type"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "id_type"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "module_type"
+              }
+            ]
           }
         },
         {
@@ -3078,12 +3143,8 @@
               "type": "FIELD",
               "name": "const",
               "content": {
-                "type": "PREC",
-                "value": 1,
-                "content": {
-                  "type": "STRING",
-                  "value": "const"
-                }
+                "type": "SYMBOL",
+                "name": "const_keyword"
               }
             },
             {
@@ -3236,6 +3297,22 @@
     "struct_literal_member": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "const",
+              "content": {
+                "type": "SYMBOL",
+                "name": "const_keyword"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "FIELD",
           "name": "name",

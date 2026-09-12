@@ -60,6 +60,8 @@ module.exports = grammar({
     conflicts: $ => [
     ],
 
+    word: $ => $.id_literal,
+
     rules: {
         source_file: $ => seq(
             // imports are valid only on top of the file
@@ -79,6 +81,10 @@ module.exports = grammar({
         // +------+
 
         not_implemented_syntax: $ => token('\0'),
+        pub_keyword: $ => token(prec(2, 'pub')),
+        const_keyword: $ => token(prec(2, 'const')),
+        let_keyword: $ => token(prec(2, 'let')),
+
 
         generic_def_params: $ => _params_wrapper('<', $.id_type_pair, '>'),
         id_type_pair: $ => seq(
@@ -116,7 +122,7 @@ module.exports = grammar({
 
         alias_type: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', 'pub')),
+            optional(field('pub', $.pub_keyword)),
             'type',
             field('name', $.id_literal),
             '=',
@@ -126,7 +132,7 @@ module.exports = grammar({
 
         new_type: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', 'pub')),
+            optional(field('pub', $.pub_keyword)),
             'type',
             field('name', $.id_literal),
             optional(field('generic_params', $.generic_def_params)),
@@ -142,14 +148,14 @@ module.exports = grammar({
 
         global_variable_def: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', 'pub')),
+            optional(field('pub', $.pub_keyword)),
             $._generic_variable,
         ),
 
         local_variable_def: $ => $._generic_variable,
 
         _generic_variable: $ => seq(
-            field('kind', choice('const', 'let')),
+            field('kind', choice($.const_keyword, $.let_keyword)),
             field('name', $.id_literal),
             ':',
             optional(field('type', $._primitive_type)),
@@ -164,6 +170,7 @@ module.exports = grammar({
 
         func_def: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
+            optional(field('pub', $.pub_keyword)),
             $.func_sign,
             field('body', $.block)
         ),
@@ -288,14 +295,20 @@ module.exports = grammar({
         call_expression_args: $ => _params_wrapper('(', $._expression, ')'),
 
 
+        prec6_operators: $ => choice('*', '/', '%'),
+        prec5_operators: $ => choice('+', '-', '|', '^', '&^', '&'),
+        prec4_operators: $ => choice('<<', '>>'),
+        prec3_operators: $ => choice('==', '!=', '<', '>', '<=', '>='),
+        prec2_operators: $ => '&&',
+        prec1_operators: $ => '||',
 
         binary_expression: $ => choice(
-            prec.left(6, seq(field('left', $._expression), field('op', choice('*', '/', '%')), field('right', $._expression))),
-            prec.left(5, seq(field('left', $._expression), field('op', choice('+', '-', '|', '^', '&^', '&')), field('right', $._expression))),
-            prec.left(4, seq(field('left', $._expression), field('op', choice('<<', '>>')), field('right', $._expression))),
-            prec.left(3, seq(field('left', $._expression), field('op', choice('==', '!=', '<', '>', '<=', '>=')), field('right', $._expression))),
-            prec.left(2, seq(field('left', $._expression), field('op', '&&'), field('right', $._expression))),
-            prec.left(1, seq(field('left', $._expression), field('op', '||'), field('right', $._expression))),
+            prec.left(6, seq(field('left', $._expression), field('op', $.prec6_operators), field('right', $._expression))),
+            prec.left(5, seq(field('left', $._expression), field('op', $.prec5_operators), field('right', $._expression))),
+            prec.left(4, seq(field('left', $._expression), field('op', $.prec4_operators), field('right', $._expression))),
+            prec.left(3, seq(field('left', $._expression), field('op', $.prec3_operators), field('right', $._expression))),
+            prec.left(2, seq(field('left', $._expression), field('op', $.prec2_operators), field('right', $._expression))),
+            prec.left(1, seq(field('left', $._expression), field('op', $.prec1_operators), field('right', $._expression))),
         ),
 
         unary_expression: $ => prec(7, choice(
@@ -333,10 +346,10 @@ module.exports = grammar({
 
 
 
-        id_type: $ => token(/[a-zA-Z_][a-zA-Z0-9_-]*/),
+        id_type: $ => alias($.id_literal, $.id_type),
         ptr_type: $ => seq(
             '*',
-            optional(field('const', prec(1, 'const'))),
+            optional(field('const', $.const_keyword)),
             field('base', $._primitive_type)
         ), // *PTYPE
 
@@ -344,13 +357,13 @@ module.exports = grammar({
 
         arr_ptr_type: $ => seq(
             '[*]',
-            optional(field('const', prec(1, 'const'))),
+            optional(field('const', $.const_keyword)),
             field('base', $._primitive_type)
         ), // [*]PTYPE
 
         slice_type: $ => seq(
             '[]',
-            optional(field('const', prec(1, 'const'))),
+            optional(field('const', $.const_keyword)),
             field('base', $._primitive_type)
         ), // []PTYPE
 
@@ -358,14 +371,14 @@ module.exports = grammar({
             '[',
             field('size', $.int_literal),
             ']',
-            optional(field('const', prec(1, 'const'))),
+            optional(field('const', $.const_keyword)),
             field('base', $._primitive_type),
         ), // [N]PTYPE
 
 
 
         func_type_param: $ => seq(
-            optional(field('const', prec(1, 'const'))),
+            optional(field('const', $.const_keyword)),
             field('type', $._primitive_type),
         ),
 
@@ -385,7 +398,7 @@ module.exports = grammar({
 
 
         genric_type_params: $ => _params_wrapper('<', $._primitive_type, '>'),
-        generic_type: $ => seq(field('name', $.id_type), field('parameters', $.genric_type_params)), // id<PTYPE...>
+        generic_type: $ => seq(field('name', choice($.id_type, $.module_type)), field('parameters', $.genric_type_params)), // id<PTYPE...>
 
 
         struct_type_members: $ => _params_wrapper('{', optional($.id_type_pair), '}'),
@@ -496,7 +509,7 @@ module.exports = grammar({
 
 
         func_literal_param: $ => seq(
-            optional(field('const', prec(1, 'const'))),
+            optional(field('const', $.const_keyword)),
             field('name', $.id_literal),
             ':',
             field('type', $.id_type),
@@ -519,6 +532,7 @@ module.exports = grammar({
 
 
         struct_literal_member: $ => seq(
+            optional(field('const', $.const_keyword)),
             field('name', $.id_literal),
             ':',
             field('value', $.not_implemented_syntax) // expression
