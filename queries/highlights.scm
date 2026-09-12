@@ -1,12 +1,9 @@
 ; highlights.scm — naoslang
 ; Tree-sitter highlight query file
 
-; ---------------------------------------------------------------------------
-; Comments
-; ---------------------------------------------------------------------------
-
 (comment_line) @comment
 (comment_multiline) @comment
+
 
 ; ---------------------------------------------------------------------------
 ; Keywords
@@ -20,12 +17,8 @@
   "interface"
 ] @keyword
 
-; "using @import(...)" and "id = @import(...)" — keep "using", "@" and
-; "import" all under the same capture so they can share one color
 "using" @keyword.import
 "import" @keyword.import
-(global_import "@" @keyword.import)
-(alias_import "@" @keyword.import)
 
 (pub_keyword) @keyword.modifier
 (const_keyword) @keyword.modifier
@@ -132,3 +125,10 @@
 ; on the name, since it's declared later in the file)
 (compiler_action "@" @function.macro)
 (compiler_action name: (id_literal) @function.macro)
+
+; ---------------------------------------------------------------------------
+; Imports: "using @import(...)" / "id = @import(...)"
+; ---------------------------------------------------------------------------
+; declared last so this "@" wins over the generic @punctuation.special rule
+(global_import "@" @keyword.import)
+(alias_import "@" @keyword.import)
