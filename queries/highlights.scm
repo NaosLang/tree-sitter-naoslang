@@ -1,9 +1,9 @@
 ; highlights.scm — naoslang
 ; Tree-sitter highlight query file
 
-; ============================================================
+; ---------------------------------------------------------------------------
 ; Comments
-; ============================================================
+; ---------------------------------------------------------------------------
 
 (comment_line) @comment
 (comment_multiline) @comment
@@ -16,12 +16,16 @@
   "extends"
   "type"
   "fn"
-  "using"
   "struct"
   "interface"
 ] @keyword
 
+; "using @import(...)" and "id = @import(...)" — keep "using", "@" and
+; "import" all under the same capture so they can share one color
+"using" @keyword.import
 "import" @keyword.import
+(global_import "@" @keyword.import)
+(alias_import "@" @keyword.import)
 
 (pub_keyword) @keyword.modifier
 (const_keyword) @keyword.modifier
@@ -41,17 +45,22 @@
 ; Operators
 ; ---------------------------------------------------------------------------
 
+; binary operators are grouped by tree-sitter under these named
+; wrapper rules — capture the wrapper node itself rather than the
+; raw string, since compound tokens like "&&"/"||"/"<<" are not
+; always exposed as standalone anonymous node types
 [
-  "="
-  "->"
-  "::"
-  "+" "-" "*" "/" "%"
-  "|" "^" "&" "&^"
-  "<<" ">>"
-  "==" "!=" "<" ">" "<=" ">="
-  "&&" "||"
-  "!" "~"
+  (prec1_operators)
+  (prec2_operators)
+  (prec3_operators)
+  (prec4_operators)
+  (prec5_operators)
+  (prec6_operators)
 ] @operator
+
+; tokens used directly (not behind a wrapper rule) are safe as raw strings
+["=" "->" "::"] @operator
+["-" "!" "~" "&" "*"] @operator
 
 ; ---------------------------------------------------------------------------
 ; Literals
@@ -108,7 +117,6 @@
 ; ---------------------------------------------------------------------------
 
 (struct_literal name: (id_literal) @constructor)
-(nested_literal name: (id_literal) @constructor)
 (struct_literal_member name: (id_literal) @property)
 
 ; ---------------------------------------------------------------------------
