@@ -33,6 +33,16 @@
     "type": "alias_type",
     "named": true,
     "fields": {
+      "attributes": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "compiler_attributes",
+            "named": true
+          }
+        ]
+      },
       "base": {
         "multiple": false,
         "required": true,
@@ -233,6 +243,122 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "compiler_attribute",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "compiler_attribute_args",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "compiler_attribute_args",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "compiler_attribute_pair",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "compiler_attribute_pair",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_str_literal",
+            "named": true
+          },
+          {
+            "type": "str_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "compiler_attributes",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "compiler_attribute",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "func_def",
+    "named": true,
+    "fields": {
+      "attributes": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "compiler_attributes",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "func_sign",
+          "named": true
+        },
+        {
+          "type": "not_implemented_syntax",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -825,6 +951,16 @@
     "type": "new_type",
     "named": true,
     "fields": {
+      "attributes": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "compiler_attributes",
+            "named": true
+          }
+        ]
+      },
       "base": {
         "multiple": false,
         "required": true,
@@ -1045,6 +1181,10 @@
           "named": true
         },
         {
+          "type": "func_def",
+          "named": true
+        },
+        {
           "type": "global_import",
           "named": true
         },
@@ -1173,6 +1313,10 @@
   {
     "type": "interface",
     "named": false
+  },
+  {
+    "type": "not_implemented_syntax",
+    "named": true
   },
   {
     "type": "pub",

@@ -45,6 +45,7 @@ module.exports = grammar({
 
         _program: $ => choice(
             $._new_type,
+            $.func_def,
         ),
 
         // +------+
@@ -70,6 +71,7 @@ module.exports = grammar({
         ),
 
         alias_type: $ => seq(
+            optional(field('attributes', $.compiler_attributes)),
             optional(field('pub', 'pub')),
             'type',
             field('name', $.id_literal),
@@ -79,6 +81,7 @@ module.exports = grammar({
         ),
 
         new_type: $ => seq(
+            optional(field('attributes', $.compiler_attributes)),
             optional(field('pub', 'pub')),
             'type',
             field('name', $.id_literal),
@@ -93,12 +96,42 @@ module.exports = grammar({
         // | Function Def |
         // +--------------+
 
+        func_def: $ => seq(
+            optional(field('attributes', $.compiler_attributes)),
+            $.func_sign,
+            $.not_implemented_syntax, // block
+        ),
+
         func_sign: $ => seq(
             'fn',
             field('name', $.id_literal),
             optional(field('generic_params', $.generic_def_params)),
             field('parameters', $.func_literal_params),
             optional($._func_literal_return),
+        ),
+
+        // +----------+
+        // | Compiler |
+        // +----------+
+
+        compiler_attributes: $ => repeat1($.compiler_attribute),
+
+        compiler_attribute: $ => seq(
+            '@',
+            field('name', $.id_literal),
+            optional(field('arguments', $.compiler_attribute_args)),
+        ),
+
+        compiler_attribute_args: $ => seq(
+            '(',
+            separatedByTrailing(',', $.compiler_attribute_pair),
+            ')',
+        ),
+
+        compiler_attribute_pair: $ => seq(
+            field('key', $.id_literal),
+            '=',
+            field('value', $._string_literal),
         ),
 
         // +---------+
@@ -219,6 +252,7 @@ module.exports = grammar({
 
         _literal: $ => literalExcept($), // all literals
         _nestable_literal: $ => choice($.id_literal, $.struct_literal, $.nested_literal), // all literals that support the id.LIT
+        _string_literal: $ => choice($.str_literal, $.raw_str_literal),
 
 
 
