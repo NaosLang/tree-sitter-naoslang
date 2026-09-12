@@ -35,6 +35,10 @@
         {
           "type": "SYMBOL",
           "name": "global_variable_def"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_extension"
         }
       ]
     },
@@ -113,6 +117,63 @@
             "type": "SYMBOL",
             "name": "_primitive_type"
           }
+        }
+      ]
+    },
+    "type_extension": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "extends"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "id_literal"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "generic_params",
+              "content": {
+                "type": "SYMBOL",
+                "name": "generic_def_params"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_extension_body"
+        }
+      ]
+    },
+    "type_extension_body": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "func_def"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
         }
       ]
     },
@@ -371,6 +432,10 @@
         {
           "type": "STRING",
           "value": "="
+        },
+        {
+          "type": "SYMBOL",
+          "name": "not_implemented_syntax"
         },
         {
           "type": "STRING",

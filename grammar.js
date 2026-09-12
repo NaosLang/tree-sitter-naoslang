@@ -47,6 +47,7 @@ module.exports = grammar({
             $._new_type,
             $.func_def,
             $.global_variable_def,
+            $.type_extension,
         ),
 
         // +------+
@@ -60,6 +61,24 @@ module.exports = grammar({
             field('name', $.id_literal),
             ':',
             field('type', $._primitive_type),
+        ),
+
+
+        // +-----------------+
+        // | Type Extensions |
+        // +-----------------+
+
+        type_extension: $ => seq(
+            'extends',
+            field('name', $.id_literal),
+            optional(field('generic_params', $.generic_def_params)),
+            $.type_extension_body,
+        ),
+
+        type_extension_body: $ => seq(
+            '{',
+            repeat($.func_def),
+            '}',
         ),
 
         // +-----------+
@@ -180,7 +199,7 @@ module.exports = grammar({
         // +-------+
 
         _type: $ => typeExcept($), // all types
-        _primitive_type: $ => typeExcept($), // all types expect interfaces and structs
+        _primitive_type: $ => typeExcept($, $.struct_type, $.interface_type), // all types expect interfaces and structs
 
 
 

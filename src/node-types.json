@@ -839,6 +839,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "not_implemented_syntax",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1291,6 +1301,10 @@
         {
           "type": "new_type",
           "named": true
+        },
+        {
+          "type": "type_extension",
+          "named": true
         }
       ]
     }
@@ -1321,6 +1335,57 @@
       "types": [
         {
           "type": "id_type_pair",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_extension",
+    "named": true,
+    "fields": {
+      "generic_params": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_def_params",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "id_literal",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_extension_body",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_extension_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "func_def",
           "named": true
         }
       ]
@@ -1396,6 +1461,10 @@
   },
   {
     "type": "const",
+    "named": false
+  },
+  {
+    "type": "extends",
     "named": false
   },
   {
