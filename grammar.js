@@ -46,6 +46,7 @@ module.exports = grammar({
         _program: $ => choice(
             $._new_type,
             $.func_def,
+            $.global_variable_def,
         ),
 
         // +------+
@@ -91,6 +92,28 @@ module.exports = grammar({
             ';',
         ),
 
+
+        // +--------------+
+        // | Variable_Def |
+        // +--------------+
+
+        global_variable_def: $ => seq(
+            optional(field('attributes', $.compiler_attributes)),
+            optional(field('pub', 'pub')),
+            $._generic_variable,
+        ),
+
+        local_variable_def: $ => $._generic_variable,
+
+        _generic_variable: $ => seq(
+            field('kind', choice('const', 'let')),
+            field('name', $.id_literal),
+            ':',
+            optional(field('type', $._primitive_type)),
+            '=',
+            $.not_implemented_syntax, // expression
+            ';'
+        ),
 
         // +--------------+
         // | Function Def |
