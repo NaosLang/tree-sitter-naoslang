@@ -8,7 +8,6 @@ const expressionExcept = ($, ...excluded) => {
         $.func_literal,
         $.struct_literal,
         $.arr_literal,
-        $.nested_literal,
 
         $.binary_expression,
         $.unary_expression,
@@ -57,8 +56,17 @@ const literalExcept = ($, ...excluded) => {
 module.exports = grammar({
     name: 'naoslang',
 
-    conflicts: $ => [
+
+    externals: $ => [
+        $.comment_multiline,
     ],
+
+    extras: $ => [
+        /\s/,
+        $.comment_line,
+        $.comment_multiline,
+    ],
+
 
     word: $ => $.id_literal,
 
@@ -80,7 +88,8 @@ module.exports = grammar({
         // | Misc |
         // +------+
 
-        not_implemented_syntax: $ => token('\0'),
+        comment_line: $ => token(seq('//', /.*/)),
+
         pub_keyword: $ => token(prec(2, 'pub')),
         const_keyword: $ => token(prec(2, 'const')),
         let_keyword: $ => token(prec(2, 'let')),
@@ -329,7 +338,7 @@ module.exports = grammar({
             '@',
             'import',
             '(',
-            field('path', choice($.str_literal, $.raw_str_literal)),
+            field('path', $._string_literal),
             ')',
         ),
 
@@ -527,7 +536,7 @@ module.exports = grammar({
 
 
 
-        arr_literal: $ => seq('[', repeat($.not_implemented_syntax), ']'),
+        arr_literal: $ => seq('[', separatedBy(',', $._expression), ']'),
 
 
 
@@ -535,22 +544,19 @@ module.exports = grammar({
             optional(field('const', $.const_keyword)),
             field('name', $.id_literal),
             ':',
-            field('value', $.not_implemented_syntax) // expression
+            field('value', $._expression)
         ),
 
         struct_literal_members: $ => _params_wrapper('{', $.struct_literal_member, '}', true),
 
         struct_literal: $ => seq(
-            field('name', $.id_literal),
+            field('name', choice(
+                $.member_expression,
+                $.id_literal,
+            )),
             field('members', $.struct_literal_members),
         ),
 
-
-
-        nested_literal: $ => seq(
-            field('name', $.id_literal),
-            field('nested', $.struct_literal),
-        ),
     }
 });
 
