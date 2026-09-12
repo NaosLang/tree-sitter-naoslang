@@ -1,9 +1,25 @@
-const exprExcept = ($, ...excluded) => {
-    const exprs = [
+const expressionExcept = ($, ...excluded) => {
+    const expressions = [
+        $.id_literal,
+        $.int_literal,
+        $.float_literal,
+        $._string_literal,
+        $.char_literal,
+        $.func_literal,
+        $.struct_literal,
+        $.arr_literal,
+        $.nested_literal,
 
-    ];
-
-    return choice(...exprs.filter(e => !excluded.includes(e)))
+        $.binary_expression,
+        $.unary_expression,
+        $.call_expression,
+        $.member_expression,
+        $.index_expression,
+        $.slice_expression,
+        $.compiler_action,
+        $.compiler_cast_action,
+    ]
+    return choice(...expressions.filter(e => !excluded.includes(e)))
 }
 
 const typeExcept = ($, ...excluded) => {
@@ -138,7 +154,7 @@ module.exports = grammar({
             ':',
             optional(field('type', $._primitive_type)),
             '=',
-            $.not_implemented_syntax, // expression
+            field('value', $._expression),
             ';'
         ),
 
@@ -184,6 +200,28 @@ module.exports = grammar({
             field('value', $._string_literal),
         ),
 
+
+
+        compiler_action: $ => seq(
+            '@',
+            field('name', $.id_literal),
+            field('arguments', $.call_expression_args),
+        ),
+
+
+
+        compiler_cast_action: $ => prec.left(7, seq(
+            '@',
+            field('name', $.compiler_cast_action_keywords),
+            '(',
+            field('type', $._primitive_type),
+            ',',
+            field('value', $._expression),
+            ')',
+        )),
+
+        compiler_cast_action_keywords: $ => choice('as', 'bitcast'),
+
         // +-------+
         // | Block |
         // +-------+
@@ -209,8 +247,64 @@ module.exports = grammar({
         // | Expressions |
         // +-------------+
 
-        _expressions: $ => exprExcept($),
-        _value_expressions: $ => exprExcept($),
+        _expression: $ => choice(
+            expressionExcept($),
+            seq('(', $._expression, ')')
+        ),
+
+
+
+        member_expression: $ => prec.left(8, seq(
+            field('parent', $._expression),
+            optional(field('generic_arguments', seq('#', $.genric_type_params))),
+            '.',
+            field('member', $.id_literal),
+        )),
+
+        index_expression: $ => prec.left(8, seq(
+            field('array', $._expression),
+            '[',
+            field('index', $._expression),
+            ']'
+        )),
+
+        slice_expression: $ => prec.left(8, seq(
+            field('sliceable', $._expression),
+            '[',
+            optional(field('start', $._expression)),
+            ':',
+            optional(field('end', $._expression)),
+            ']',
+        )),
+
+
+
+        call_expression: $ => prec.left(8, seq(
+            field('name', $._expression),
+            optional(field('generic_arguments', seq('#', $.genric_type_params))),
+            field('arguments', $.call_expression_args),
+        )),
+
+        call_expression_args: $ => _params_wrapper('(', $._expression, ')'),
+
+
+
+        binary_expression: $ => choice(
+            prec.left(6, seq(field('left', $._expression), field('op', choice('*', '/', '%')), field('right', $._expression))),
+            prec.left(5, seq(field('left', $._expression), field('op', choice('+', '-', '|', '^', '&^', '&')), field('right', $._expression))),
+            prec.left(4, seq(field('left', $._expression), field('op', choice('<<', '>>')), field('right', $._expression))),
+            prec.left(3, seq(field('left', $._expression), field('op', choice('==', '!=', '<', '>', '<=', '>=')), field('right', $._expression))),
+            prec.left(2, seq(field('left', $._expression), field('op', '&&'), field('right', $._expression))),
+            prec.left(1, seq(field('left', $._expression), field('op', '||'), field('right', $._expression))),
+        ),
+
+        unary_expression: $ => prec(7, choice(
+            seq('-', $._expression),
+            seq('!', $._expression),
+            seq('~', $._expression),
+            seq('&', $._expression),
+            seq('*', $._expression),
+        )),
 
         // +---------+
         // | Imports |
@@ -329,7 +423,6 @@ module.exports = grammar({
         // +----------+
 
         _literal: $ => literalExcept($), // all literals
-        _nestable_literal: $ => choice($.id_literal, $.struct_literal, $.nested_literal), // all literals that support the id.LIT
         _string_literal: $ => choice($.str_literal, $.raw_str_literal),
 
 
@@ -442,7 +535,7 @@ module.exports = grammar({
 
         nested_literal: $ => seq(
             field('name', $.id_literal),
-            field('nested', $._nestable_literal),
+            field('nested', $.struct_literal),
         ),
     }
 });
