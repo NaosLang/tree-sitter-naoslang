@@ -10,12 +10,25 @@
 ; ---------------------------------------------------------------------------
 
 [
-  "extends"
   "type"
-  "fn"
   "struct"
   "interface"
+] @keyword.type
+
+"return" @keyword.return
+"break" @keyword.return
+"continue" @keyword.return
+
+"if" @keyword.conditional
+
+"loop" @keyword.repeat
+
+[
+  "defer"
+  "extends"
 ] @keyword
+
+"fn" @keyword.function
 
 "using" @keyword.import
 "import" @keyword.import
@@ -49,6 +62,8 @@
   (prec4_operators)
   (prec5_operators)
   (prec6_operators)
+  (assignment_statement_operators)
+  (update_statement_operators)
 ] @operator
 
 ; tokens used directly (not behind a wrapper rule) are safe as raw strings

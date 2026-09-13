@@ -257,6 +257,62 @@ module.exports = grammar({
 
         _statement: $ => choice(
             $.local_variable_def,
+            $.return_statement,
+            $.assignment_statement,
+            $.update_statement,
+            $.break_statement,
+            $.defer_statement,
+            $.continue_statement,
+            $.loop_statement,
+            $.if_statement,
+        ),
+
+        break_statement: $ => seq('break', ';'),
+        continue_statement: $ => seq('continue', ';'),
+
+        return_statement: $ => seq(
+            'return',
+            optional($._expression),
+            ';'
+        ),
+
+        defer_statement: $ => seq(
+            'defer',
+            $._expression,
+            ';',
+        ),
+
+        loop_statement: $ => seq(
+            'loop',
+            $.block,
+        ),
+
+        if_statement: $ => seq(
+            'if',
+            '(',
+            field('condition', $._expression),
+            ')',
+            $.block,
+        ),
+
+        assignment_statement_operators: $ => choice(
+            '=',
+            '+=', '-=', '*=', '/=', '%=',
+            '&=', '|=', '^=', '<<=', '>>=', '&^='
+        ),
+
+        assignment_statement: $ => seq(
+            field('left', $._expression),
+            field('op', $.assignment_statement_operators),
+            field('right', $._expression),
+            ';'
+        ),
+
+        update_statement_operators: $ => choice('++', '--'),
+        update_statement: $ => seq(
+            field('argument', $._expression),
+            field('operator', $.update_statement_operators),
+            ';'
         ),
 
         // +-------------+
