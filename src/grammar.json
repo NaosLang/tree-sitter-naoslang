@@ -2855,6 +2855,18 @@
                 "value": "[1-9]"
               },
               {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "_"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
                 "type": "REPEAT",
                 "content": {
                   "type": "SEQ",
@@ -3012,7 +3024,7 @@
     "float_literal": {
       "type": "TOKEN",
       "content": {
-        "type": "SEQ",
+        "type": "CHOICE",
         "members": [
           {
             "type": "SEQ",

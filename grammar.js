@@ -561,13 +561,13 @@ module.exports = grammar({
 
         int_literal: $ => token(choice(
             seq('0', choice('x', 'X'), _digits(/[0-9a-fA-F]/)), // hexadecimal integer
-            seq(/[1-9]/, repeat(_digits(/[0-9]/))),                     // decimal integer
+            seq(/[1-9]/, optional('_'), repeat(_digits(/[0-9]/))),                     // decimal integer
             seq('0', choice('o', 'O'), _digits(/[0-7]/)),       // octal integer
             seq('0', choice('b', 'B'), _digits(/[0-1]/)),       // binary integer
             '0', // zero becouse is not a valid int literal '013' in octal or decimal base
         )),
 
-        float_literal: $ => token(seq(
+        float_literal: $ => token(choice(
             seq(
                 _digits(/[0-9]/),
                 '.',
