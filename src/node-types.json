@@ -68,10 +68,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -81,10 +77,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -219,10 +211,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -232,10 +220,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -281,10 +265,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -294,10 +274,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -1118,10 +1094,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -1131,10 +1103,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -1439,10 +1407,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -1452,10 +1416,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -1572,10 +1532,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -1585,10 +1541,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -1634,10 +1586,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -1647,10 +1595,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -1696,10 +1640,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -1709,10 +1649,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -1808,10 +1744,6 @@
           "named": true
         },
         {
-          "type": "interface_type",
-          "named": true
-        },
-        {
           "type": "module_type",
           "named": true
         },
@@ -1821,10 +1753,6 @@
         },
         {
           "type": "slice_type",
-          "named": true
-        },
-        {
-          "type": "struct_type",
           "named": true
         }
       ]
@@ -1923,10 +1851,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -1936,10 +1860,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -2082,10 +2002,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -2095,10 +2011,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -2469,10 +2381,6 @@
           "named": true
         },
         {
-          "type": "interface_type",
-          "named": true
-        },
-        {
           "type": "module_type",
           "named": true
         },
@@ -2482,10 +2390,6 @@
         },
         {
           "type": "slice_type",
-          "named": true
-        },
-        {
-          "type": "struct_type",
           "named": true
         }
       ]
@@ -2544,10 +2448,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -2557,10 +2457,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -2943,10 +2839,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -2956,10 +2848,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]
@@ -3336,10 +3224,6 @@
             "named": true
           },
           {
-            "type": "interface_type",
-            "named": true
-          },
-          {
             "type": "module_type",
             "named": true
           },
@@ -3349,10 +3233,6 @@
           },
           {
             "type": "slice_type",
-            "named": true
-          },
-          {
-            "type": "struct_type",
             "named": true
           }
         ]

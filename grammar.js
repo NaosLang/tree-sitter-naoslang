@@ -1,58 +1,3 @@
-const expressionExcept = ($, ...excluded) => {
-    const expressions = [
-        $.id_literal,
-        $.int_literal,
-        $.float_literal,
-        $._string_literal,
-        $.char_literal,
-        $.func_literal,
-        $.struct_literal,
-        $.arr_literal,
-
-        $.binary_expression,
-        $.unary_expression,
-        $.call_expression,
-        $.member_expression,
-        $.index_expression,
-        $.slice_expression,
-        $.compiler_action,
-        $.compiler_cast_action,
-    ]
-    return choice(...expressions.filter(e => !excluded.includes(e)))
-}
-
-const typeExcept = ($, ...excluded) => {
-    const types = [
-        $.id_type,
-        $.ptr_type,
-        $.arr_ptr_type,
-        $.arr_type,
-        $.slice_type,
-        $.func_type,
-        $.module_type,
-        $.generic_type,
-        $.struct_type,
-        $.interface_type,
-    ];
-    return choice(...types.filter(t => !excluded.includes(t)))
-};
-
-const literalExcept = ($, ...excluded) => {
-    const literals = [
-        $.id_literal,
-        $.str_literal,
-        $.raw_str_literal,
-        $.char_literal,
-        $.int_literal,
-        $.float_literal,
-        $.func_literal,
-        $.arr_literal,
-        $.struct_literal,
-    ];
-    return choice(...literals.filter(t => !excluded.includes(t)))
-};
-
-
 module.exports = grammar({
     name: 'naoslang',
 
@@ -343,7 +288,23 @@ module.exports = grammar({
         // +-------------+
 
         _expression: $ => choice(
-            expressionExcept($),
+            $.id_literal,
+            $.int_literal,
+            $.float_literal,
+            $._string_literal,
+            $.char_literal,
+            $.func_literal,
+            $.struct_literal,
+            $.arr_literal,
+
+            $.binary_expression,
+            $.unary_expression,
+            $.call_expression,
+            $.member_expression,
+            $.index_expression,
+            $.slice_expression,
+            $.compiler_action,
+            $.compiler_cast_action,
             seq('(', $._expression, ')')
         ),
 
@@ -429,8 +390,29 @@ module.exports = grammar({
         // | Types |
         // +-------+
 
-        _type: $ => typeExcept($), // all types
-        _primitive_type: $ => typeExcept($, $.struct_type, $.interface_type), // all types expect interfaces and structs
+        _type: $ => choice(
+            $.id_type,
+            $.ptr_type,
+            $.arr_ptr_type,
+            $.arr_type,
+            $.slice_type,
+            $.func_type,
+            $.module_type,
+            $.generic_type,
+            $.struct_type,
+            $.interface_type,
+        ),
+
+        _primitive_type: $ => choice(
+            $.id_type,
+            $.ptr_type,
+            $.arr_ptr_type,
+            $.arr_type,
+            $.slice_type,
+            $.func_type,
+            $.module_type,
+            $.generic_type,
+        ),
 
 
 
@@ -523,7 +505,18 @@ module.exports = grammar({
         // | Literals |
         // +----------+
 
-        _literal: $ => literalExcept($), // all literals
+        _literal: $ => choice(
+            $.id_literal,
+            $.str_literal,
+            $.raw_str_literal,
+            $.char_literal,
+            $.int_literal,
+            $.float_literal,
+            $.func_literal,
+            $.arr_literal,
+            $.struct_literal,
+        ),
+
         _string_literal: $ => choice($.str_literal, $.raw_str_literal),
 
 

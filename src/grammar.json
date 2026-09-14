@@ -1135,73 +1135,68 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "id_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "int_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "float_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_string_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "char_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "func_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "struct_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "arr_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "binary_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "unary_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "call_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "member_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "index_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "slice_expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "compiler_action"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "compiler_cast_action"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "id_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "int_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "float_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_string_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "char_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "func_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "struct_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "arr_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "binary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "call_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "member_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "index_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "slice_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "compiler_action"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "compiler_cast_action"
         },
         {
           "type": "SEQ",
@@ -2002,14 +1997,6 @@
         {
           "type": "SYMBOL",
           "name": "generic_type"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "struct_type"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "interface_type"
         }
       ]
     },
