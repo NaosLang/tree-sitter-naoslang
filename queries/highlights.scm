@@ -15,9 +15,11 @@
   "interface"
 ] @keyword.type
 
-"return" @keyword.return
-"break" @keyword.return
-"continue" @keyword.return
+[
+"return"
+"break"
+"continue"
+] @keyword.return
 
 "if" @keyword.conditional
 "else" @keyword.conditional
@@ -34,9 +36,9 @@
 "using" @keyword.import
 "import" @keyword.import
 
-(pub_keyword) @keyword.modifier
-(const_keyword) @keyword.modifier
-(let_keyword) @keyword
+"let" @keyword.modifier
+"const" @keyword.modifier
+"pub" @keyword
 
 (compiler_cast_action_keywords) @keyword.operator
 

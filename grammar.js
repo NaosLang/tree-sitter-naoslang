@@ -70,6 +70,17 @@ module.exports = grammar({
 
     word: $ => $.id_literal,
 
+    reserved: {
+        global: $ => [
+            'let', 'const', 'pub',
+            'extends', 'type', 'fn',
+            'break', 'continue', 'return',
+            'defer', 'loop', 'if',
+            'else', 'using', 'import',
+            'struct', 'interface',
+        ]
+    },
+
     rules: {
         source_file: $ => seq(
             // imports are valid only on top of the file
@@ -89,10 +100,6 @@ module.exports = grammar({
         // +------+
 
         comment_line: $ => token(seq('//', /.*/)),
-
-        pub_keyword: $ => token(prec(2, 'pub')),
-        const_keyword: $ => token(prec(2, 'const')),
-        let_keyword: $ => token(prec(2, 'let')),
 
 
         generic_def_params: $ => _params_wrapper('<', $.id_type_pair, '>'),
@@ -131,7 +138,7 @@ module.exports = grammar({
 
         alias_type: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', $.pub_keyword)),
+            optional(field('pub', 'pub')),
             'type',
             field('name', $.id_literal),
             '=',
@@ -141,7 +148,7 @@ module.exports = grammar({
 
         new_type: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', $.pub_keyword)),
+            optional(field('pub', 'pub')),
             'type',
             field('name', $.id_literal),
             optional(field('generic_params', $.generic_def_params)),
@@ -157,14 +164,14 @@ module.exports = grammar({
 
         global_variable_def: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', $.pub_keyword)),
+            optional(field('pub', 'pub')),
             $._generic_variable,
         ),
 
         local_variable_def: $ => $._generic_variable,
 
         _generic_variable: $ => seq(
-            field('kind', choice($.const_keyword, $.let_keyword)),
+            field('kind', choice('const', 'let')),
             field('name', $.id_literal),
             ':',
             optional(field('type', $._primitive_type)),
@@ -179,7 +186,7 @@ module.exports = grammar({
 
         func_def: $ => seq(
             optional(field('attributes', $.compiler_attributes)),
-            optional(field('pub', $.pub_keyword)),
+            optional(field('pub', 'pub')),
             $.func_sign,
             field('body', $.block)
         ),
@@ -293,11 +300,13 @@ module.exports = grammar({
             field('condition', $._expression),
             ')',
             field('block', $.block),
-            optional(field('elseifs', $.elseif_statements)),
-            optional(field('else', $.else_statement)),
+            optional($._else_chain),
         ),
 
-        elseif_statements: $ => repeat1($.elseif_statement),
+        _else_chain: $ => choice(
+            $.elseif_statement,
+            $.else_statement,
+        ),
 
         elseif_statement: $ => seq(
             'else',
@@ -428,7 +437,7 @@ module.exports = grammar({
         id_type: $ => alias($.id_literal, $.id_type),
         ptr_type: $ => seq(
             '*',
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('base', $._primitive_type)
         ), // *PTYPE
 
@@ -436,13 +445,13 @@ module.exports = grammar({
 
         arr_ptr_type: $ => seq(
             '[*]',
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('base', $._primitive_type)
         ), // [*]PTYPE
 
         slice_type: $ => seq(
             '[]',
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('base', $._primitive_type)
         ), // []PTYPE
 
@@ -450,14 +459,14 @@ module.exports = grammar({
             '[',
             field('size', $.int_literal),
             ']',
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('base', $._primitive_type),
         ), // [N]PTYPE
 
 
 
         func_type_param: $ => seq(
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('type', $._primitive_type),
         ),
 
@@ -588,7 +597,7 @@ module.exports = grammar({
 
 
         func_literal_param: $ => seq(
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('name', $.id_literal),
             ':',
             field('type', $.id_type),
@@ -611,7 +620,7 @@ module.exports = grammar({
 
 
         struct_literal_member: $ => seq(
-            optional(field('const', $.const_keyword)),
+            optional(field('const', 'const')),
             field('name', $.id_literal),
             ':',
             field('value', $._expression)
