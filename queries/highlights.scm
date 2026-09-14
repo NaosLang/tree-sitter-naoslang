@@ -20,6 +20,7 @@
 "continue" @keyword.return
 
 "if" @keyword.conditional
+"else" @keyword.conditional
 
 "loop" @keyword.repeat
 

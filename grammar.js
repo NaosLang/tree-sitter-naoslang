@@ -292,7 +292,21 @@ module.exports = grammar({
             '(',
             field('condition', $._expression),
             ')',
-            $.block,
+            field('block', $.block),
+            optional(field('elseifs', $.elseif_statements)),
+            optional(field('else', $.else_statement)),
+        ),
+
+        elseif_statements: $ => repeat1($.elseif_statement),
+
+        elseif_statement: $ => seq(
+            'else',
+            field('if', $.if_statement),
+        ),
+
+        else_statement: $ => seq(
+            'else',
+            field('block', $.block),
         ),
 
         assignment_statement_operators: $ => choice(
