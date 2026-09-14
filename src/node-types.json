@@ -867,80 +867,89 @@
   {
     "type": "call_expression_args",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "arr_literal",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "call_expression",
-          "named": true
-        },
-        {
-          "type": "char_literal",
-          "named": true
-        },
-        {
-          "type": "compiler_action",
-          "named": true
-        },
-        {
-          "type": "compiler_cast_action",
-          "named": true
-        },
-        {
-          "type": "float_literal",
-          "named": true
-        },
-        {
-          "type": "func_literal",
-          "named": true
-        },
-        {
-          "type": "id_literal",
-          "named": true
-        },
-        {
-          "type": "index_expression",
-          "named": true
-        },
-        {
-          "type": "int_literal",
-          "named": true
-        },
-        {
-          "type": "member_expression",
-          "named": true
-        },
-        {
-          "type": "raw_str_literal",
-          "named": true
-        },
-        {
-          "type": "slice_expression",
-          "named": true
-        },
-        {
-          "type": "str_literal",
-          "named": true
-        },
-        {
-          "type": "struct_literal",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "arr_literal",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "compiler_action",
+            "named": true
+          },
+          {
+            "type": "compiler_cast_action",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "func_literal",
+            "named": true
+          },
+          {
+            "type": "id_literal",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "raw_str_literal",
+            "named": true
+          },
+          {
+            "type": "slice_expression",
+            "named": true
+          },
+          {
+            "type": "str_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1461,16 +1470,17 @@
   {
     "type": "func_literal_params",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "func_literal_param",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "func_literal_param",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1658,31 +1668,33 @@
   {
     "type": "func_type_params",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "func_type_param",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "func_type_param",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "generic_def_params",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "id_type_pair",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "id_type_pair",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1718,44 +1730,45 @@
   {
     "type": "genric_type_params",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "arr_ptr_type",
-          "named": true
-        },
-        {
-          "type": "arr_type",
-          "named": true
-        },
-        {
-          "type": "func_type",
-          "named": true
-        },
-        {
-          "type": "generic_type",
-          "named": true
-        },
-        {
-          "type": "id_type",
-          "named": true
-        },
-        {
-          "type": "module_type",
-          "named": true
-        },
-        {
-          "type": "ptr_type",
-          "named": true
-        },
-        {
-          "type": "slice_type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "arr_ptr_type",
+            "named": true
+          },
+          {
+            "type": "arr_type",
+            "named": true
+          },
+          {
+            "type": "func_type",
+            "named": true
+          },
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "id_type",
+            "named": true
+          },
+          {
+            "type": "module_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -3430,16 +3443,17 @@
   {
     "type": "struct_literal_members",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "struct_literal_member",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "struct_literal_member",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -3461,16 +3475,17 @@
   {
     "type": "struct_type_members",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "id_type_pair",
-          "named": true
-        }
-      ]
+    "fields": {
+      "_wrapper_param": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "id_type_pair",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

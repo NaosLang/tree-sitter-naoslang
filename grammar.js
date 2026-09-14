@@ -648,9 +648,9 @@ function _decimal_exp() {
 
 function _params_wrapper(w1, parmaRule, w2, trailing) {
     if (trailing) {
-        return seq(w1, optional(separatedByTrailing(',', parmaRule)), w2)
+        return seq(w1, optional(separatedByTrailing(',', field('_wrapper_param', parmaRule))), w2)
     }
-    return seq(w1, optional(separatedBy(',', parmaRule)), w2)
+    return seq(w1, optional(separatedBy(',', field('_wrapper_param', parmaRule))), w2)
 }
 
 function separatedBy(sep, rule) {
